@@ -1,0 +1,22 @@
+# summary of steps in analysis of regions depleted for signatures of introgression
+
+# excluding centromeres, short windows, & only retain sufficiently long regions
+test.deserts.22aug22.R
+# lines 1 -362 
+# 1) generates non-overlapping 1Mb windows per chr 'bins', filter out bins overlapping centromeres, only retain bins of length 1Mb
+# 2) overlap bins with the putative introgressed fragments (determined as the overlap of s*-skov methods) per individual
+# 3) counts frequency of an introgressed fragment within a bin 
+# 4) take bins with no introgressed fragments as initial 'depleted' set - save(reduced_deserts,file="/scratch/devel/hpawar/admix/overlap.s*.skov/deserts/reduced.deserts.23aug22")
+
+# lines 539-end
+# 5) assess length distribution of 'depleted' set
+# 6) take sums of Mb covered by 'depleted' regions >=5Mb, >=8Mb, & how much of each chr they cover
+#-----------------------------------------------------------------------------------------------------------------------
+
+# assess data coverage of the 'depleted' set
+test.datacov.depleted.8sep22.R
+# 1) write out callable proportion for each 40kb window (info on which windows are informative) 
+# 2) annotate the initial 'depleted' set with callable proportion info -> ie for each 'depleted' region - which 40kb windows are overlapping & what are their callable proportions? take the mean of these callable proportions to have a single value for each 'depleted' region
+# 3) filter initial 'depleted' set by mean callable proportion > 0.5
+# 4) take sums of Mb covered by 'depleted' regions >=5Mb, >=8Mb, & how much of each chr they cover # much fewer than previously obtained
+127 Mb of depleted regions >= 5Mb (vs  601 Mb >= 5Mb when not taking data coverage into account)
