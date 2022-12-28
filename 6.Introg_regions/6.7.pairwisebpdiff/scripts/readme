@@ -1,0 +1,6 @@
+# pairwise base pair differences between gorilla individuals for the putative introgressed regions
+    # calc diff b/n 1) EG-EG ids, 2) WG-WG ids, 3) all gor ids (EG-WG)
+
+generate.randomreg.sufficallable.18oct22.R # to generate random regions of sufficient coverage
+pairwise.bp.diff.20oct22.R # to calculate pairwise bp diff for putative introgressed regions, for e-w,e-e,w-w
+random.pairwise.bp.diff.20oct22.R  # pairwise bp diff for random genomic regions
