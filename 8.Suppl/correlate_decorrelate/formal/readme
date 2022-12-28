@@ -1,0 +1,16 @@
+SOM 2. ABC modelling: 2.2 Summary statistic decorrelation
+Perform formal decorrelation of summary statistics using box-cox transformation & PLS
+
+uncorrelate.stats.26jan22.R #  box-cox transformation then PLS with 36 components (same number of summary statistics, as those retained post box-cox transformation)
+
+pls.10comp.17feb22.R # PLS with 10 components (ie rerun PLS with optimum number of components following https://github.com/hirzi/LSD)
+
+post.pls.abc.18feb22.R # Perform ABC inference using the decorrelated statistics (ie directly on the PLS components)
+
+pls.variance.explained.18feb22.R # Calculate how many PLS components explain 99% of the variance & Perform ABC inference using these 17 components (rather than the optimal 10 components - as performed in post.pls.abc.18feb22.R)
+
+# generate model comparison simulations for PLS ABC 'reduced dimensionality window ABC'
+pls.nulldemog.mcsim.arr 
+pls.nulldemog.mcsim.R
+
+generateabc.logit.transf.28feb22.R # perform model comparison: compare the 3 null models: original null vs PLS null vs logit-transformed null
