@@ -1,0 +1,10 @@
+# calculate % protein coding bp in putative introgressed regions = overlap of s* 99% & strict skovhmm outliers
+gene.density.s*.skov.overlap.21jul22.R # called by 
+gene.density.s*.skov.overlap.21jul22.arr
+
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# generate random regions of sufficient callability (& equivalent length dist as the putative introgressed regions) & calculate protein coding bp of these random regions 
+random.gene.density.s*skov.overlap.21oct22.R # called by
+random.gene.density.s*.skov.overlap.21oct22.arr
