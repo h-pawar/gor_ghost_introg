@@ -1,1 +1,18 @@
-HP: add data & scripts
+Characterising introgressed fragments 
+
+6.0.skov.coverage # x:autosome coverage in introgressed material in skov hmm outliers
+
+6.1.overlap.sstar.skov # overlap between the two methods & overlap expected of random genomic regions
+
+6.2.proteincodingbp/scripts # protein coding content in putative introgressed regions & in random genomic regions 
+
+6.3.pca/scripts # PCA of putative introgressed regions & of random genomic regions
+
+6.4.longesthaplotypes/scripts # haplotype networks of longest putative introgressed regions
+
+6.5.NJtrees/scripts # NJ trees of putative introgressed regions & of random genomic regions
+
+6.6.introgdeserts/scripts # regions depleted of introgressed material
+
+6.7.pairwisebpdiff/scripts # pairwise base pair differences in putative introgressed regions across all gorilla individuals
+
