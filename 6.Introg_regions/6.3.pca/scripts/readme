@@ -1,0 +1,18 @@
+# pcas of all putative introgressed regions
+pca_sstarskov_26jul22.R # called by
+pca_sstarskov_26jul22.arr
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+random_pca_sstarskov_26jul22.R # pcas of random regions (of equivalent length distribution to all putative introgressed regions)
+plot.pca.random1.10nov22.R # PCA (PCs 1-4) for 1 random rep (Representative of the genome) - for Fig 1B, 1C
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+private.intersectregions.30sep22.R # extract private introgressed regions = putative introgressed regions found only in one gorilla individual 
+private.pca.sstarskov.30sep22.R # PCA of private introgressed regions
+
+random.private.pca.sstarskov.30sep22.R #  pcas of random regions of equivlent length distribution as the private regions
+check.random.regions.30sep22.R # run a sanity check on the random regions - yes look random
+
+plot.private.pca.sstarskov.30sep22.R #  generate plots of the pcas: empirical against random regions on the same scale
