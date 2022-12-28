@@ -1,1 +1,5 @@
-HP: add data & scripts
+scripts/chr9newT.applyglm.12jul22.R # apply glms to final S* dataset & calculate population-level outliers
+
+scripts/prop.introg.perid.12jul22.R # calculate introgression proportion per indivdual (proportion of introgressed windows per individual)
+
+
