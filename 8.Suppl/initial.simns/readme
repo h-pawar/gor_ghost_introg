@@ -2,6 +2,8 @@ SOM 2. ABC modelling: 2.1 Initial simulation approach
 
 gor.demog.ms.sh # Demographic parameters in ms format
 
+#-----------------------------------------------------------------------------------------------------------------------
+
 # scripts of iterative attempts to perform minor adjustments to these parameters (to try to achieve a better fit between empirical & simulated segregating sites, prior to ABC approach)
 
 high.divergence.simul.R # called by 
