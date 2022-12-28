@@ -1,0 +1,27 @@
+# NJ trees of putative introgressed regions 
+nj_sstarskov_26jul22.R # called by
+nj_sstarskov_26jul22.arr
+
+# NJ trees of random regions of equivalent length distribution as the putative introgressed regions
+random_nj_sstarskov_27jul22.R # to generate bed files of the random regions
+random_nj_sstarskov_29jul22.R # to generate NJ trees of the random regions, called by
+random_nj_sstarskov_29jul22.arr
+
+# plot NJ trees - empirical & random regions & bootstraps
+plotnjintersect.29sep22.arr
+plotnjintersect.29sep22.R
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# NJ trees of private introgressed regions
+private.nj_sstarskov_4oct22.R
+private.nj_sstarskov_4oct22.arr
+
+# NJ trees of random regions of equivalent length distribution as the private introgressed regions
+private.random_nj_sstarskov_4oct22.R
+private.random_nj_sstarskov_4oct22.arr
+
+# plot NJ trees - empirical & random regions & bootstraps
+plotnj.private.5oct22.R
+plotnj.private.5oct22.arr
+
