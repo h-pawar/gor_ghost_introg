@@ -1,0 +1,8 @@
+
+overlap.autosomes.finalsstar.skov.perindiv.18jul22.R # calculate overlapping base pairs of sstar & skovhmm outliers - which proportion of introgressed fragments do we recover?
+
+# generate random regions of equal length distribution as the empirical regions & calculate overlap of these random regions (for 100 random reps), output the overall mean & sd by subspecies (eg, mean, sd across the GBB population across the 100 reps)
+overlap.random.regions.20jul22.R # called by
+overlap.random.regions.4may22.arr
+
+check.overlap.random.regions.pval.25jul22.R # sanity check 
