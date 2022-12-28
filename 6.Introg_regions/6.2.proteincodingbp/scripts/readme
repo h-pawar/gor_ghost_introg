@@ -2,7 +2,6 @@
 gene.density.s*.skov.overlap.21jul22.R # called by 
 gene.density.s*.skov.overlap.21jul22.arr
 
-
 #-----------------------------------------------------------------------------------------------------------------------
 
 # generate random regions of sufficient callability (& equivalent length dist as the putative introgressed regions) & calculate % protein coding bp of these random regions 
