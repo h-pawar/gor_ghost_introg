@@ -1,1 +1,15 @@
-HP: add data & scripts
+3.0.empirical_summary_stats # calculation of summary statistics in the empirical data
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+3.1.null_parameter_inference # ABC parameter inference: null model (extant gorillas) ABC output
+
+3.2.ghoste_parameter_inference # ABC parameter inference: ghoste model output
+
+3.3.ghostw_parameter_inference # ABC parameter inference: ghostw model output
+
+# within each directory are the subdirectories:
+abc_output # output from parameter inference
+scripts # scripts to generate simulations & perform parameter inference
+simn_output # simulations & summary statistics used as input to parameter inference as R objects
+
