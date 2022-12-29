@@ -10,3 +10,7 @@ overlap.random.regions.4may22.arr
 #-----------------------------------------------------------------------------------------------------------------------
 
 check.overlap.random.regions.pval.25jul22.R # sanity check 
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+archaicmb.recovered.R # archaic Mb of the high-confidence putative introgressed regions (overlap of S* -Skov HMM outliers)
