@@ -1,1 +1,7 @@
-HP: add data & scripts
+# Identifying introgressed fragments in the genome
+
+2.0.data_processing # process genomic data for input to S* 
+
+2.1.sstar_genomicdata/scripts # apply S* to genomic data per chromosome
+sstar.arr # for all autosomes (except chr 9)
+sstar.newT.chr9.arr # for chr 9
