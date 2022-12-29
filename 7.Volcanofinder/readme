@@ -1,1 +1,44 @@
-HP: add data & scripts
+# annotate ancestral state using macaque reference, ie 2 outgroups - 1st is human, then macaque
+
+# ancestral states of alleles
+zcat /scratch/devel/mkuhlwilm/gvcfs/greatapeN_"$chrom".vcf.gz | awk '! /\#/' | awk '{if(length($4) > length($5)) print $1"\t"($2-1)"\t"($2+length($4)-1); else print $1"\t"($2-1)"\t"($2+length($5)-1)}' | bedtools getfasta -tab -fi /scratch/devel/mkuhlwilm/pseudoarc/ga_ancestral.fa -bed - -bedOut | bgzip -f > /scratch/devel/mkuhlwilm/arch/subsets/tmp.anc.$chrom.bed.gz
+tabix /scratch/devel/mkuhlwilm/arch/subsets/tmp.anc.$chrom.bed.gz
+
+# annotate AA info into the vcf and do the filtering
+zcat /scratch/devel/mkuhlwilm/gvcfs/greatapeN_"$chrom".vcf.gz | sed -e 's/;MLEAC=.*;MLEAF=.*;/;/g' | /apps/BCFTOOLS/1.9/bin/bcftools view -S $fil -U -V indels - | /apps/BCFTOOLS/1.9/bin/bcftools filter --exclude 'GT~"\."' | /apps/BCFTOOLS/1.9/bin/bcftools filter --include '(MIN(FMT/DP) >= 6) && (MAX(FMT/DP) <= 100) && (MIN(FMT/MQ) > 20)' | /apps/BCFTOOLS/1.9/bin/bcftools filter --include '((FMT/MQ0)/(FMT/DP)) < 0.1' | intersectBed -wa -v -header -a stdin -b /scratch/project/devel/mkuhlwilm/RM.bed | intersectBed -wa -v -header -a stdin -b <(zcat /scratch/devel/mkuhlwilm/arch/filter/Na_"$spec"_"$chrom".bed.gz ) | /scratch/devel/mkuhlwilm/jvarkit/jvarkit/dist/vcfbigwig -T mapability -B /scratch/project/devel/mkuhlwilm/wgEncodeDukeMapabilityUniqueness35bp.bigWig /dev/stdin/ | egrep "#|mapability=1" | /apps/BCFTOOLS/1.9/bin/bcftools query -f '%CHROM\t%POS\t%ID\t%REF\t%ALT\t%QUAL\t%FILTER\t.\tGT[\t%GT]\n' - | sed 's/\//|/g' | cat /scratch/devel/mkuhlwilm/arch/subsets/gehdr.txt - | /apps/BCFTOOLS/1.9/bin/bcftools annotate -a /scratch/devel/mkuhlwilm/arch/subsets/tmp.anc.$chrom.bed.gz -h /scratch/devel/hpawar/admix/volcanofinder/input/annots.hdr -c CHROM,FROM,TO,AA - | bgzip -f > /scratch/devel/mkuhlwilm/arch/subsets/full/4_"$spec"_"$chrom".vcf.gz
+#rm /scratch/devel/mkuhlwilm/arch/subsets/tmp.anc.$chrom.bed
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+7.1.processforvf/scripts
+
+vf.allelefreq.arr # process vcf, filter (only easterns, biallelic sites, remove sites with multiple ancestral alleles annotated) & generate allele freq file
+vf.gtmatrix.arr # vcf -> genotype matrix
+vf.sfs.R # counts per chr -> cat to calc autosomes observed sfs  
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+7.2.apply.vf/scripts/
+
+vf.test.autosomes.blocks.arr # apply VolcanoFinder per fragment
+blocks_chr_23apr22.txt # each chr split into blocks of ~ equal numbers of bp
+
+7.2.apply.vf/input/ # input files
+new_4_autosomes_sfs.input.txt # spectfile
+4_"$CHR"_SF2_polym.input # freq file for each chr
+
+7.2.apply.vf/output/ # output files
+4_"$CHR"_test # merged all blocks per chr
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+7.3.vfdownstream/scripts/
+
+vf.overlap.s*.skov.21jul22.R # intersect vf outliers with putative introgressed regions (intersection of s*-skov outliers)
+vf.candidates.mts.27jun22.R # intersect vf outliers with putative introgressed regions (intersection of s*-skov outliers) with mutation info from vep
+vf.candidates.mts.27jun22.arr # wrapper script
+vf.overlap.s*.skov.mts.21jul22.R # explore mutations found 
+vf.missense.29jul22.R # which of the missense/start/stop/splice variants are specific to eastern gorillas, within the overlapping fragments, and not fixed?
+vf.check.mts.15nov22.R # sanity check
+ggplot.candidategenes.22aug22.R # plotting CLR scores of candidates
