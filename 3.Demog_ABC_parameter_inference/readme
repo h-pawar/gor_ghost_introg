@@ -13,3 +13,43 @@ abc_output # output from parameter inference
 scripts # scripts to generate simulations & perform parameter inference
 simn_output # simulations & summary statistics used as input to parameter inference as R objects
 
+#-----------------------------------------------------------------------------------------------------------------------
+
+3.1.null_parameter_inference/scripts
+
+# new batch of simulated data (700 simn reps) & summary stats were generated with 
+test.abc.model.arr #- which calls
+test.abc.model.v5.R 
+
+generateabc.6oct.trunc.R # output sumstat,param,target1
+
+# recalculated tajimas d statistic
+recalc.tajima.21mar22.R # recalculate tajimas d statistic for all the ~35,700 null demography simulations.
+recalc.tajima.21mar22.arr
+# & for reps with failed iter due to time limits
+recalc.tajima.failedreps.R  # also called by the recalc.tajima.21mar22.arr wrapper
+
+# combine the recalculated tajimas d stats with those for the original stats - THIS IS THE FINAL NULL MODEL ******
+generateabc.amendtajima.R
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+3.2.ghoste_parameter_inference/scripts
+
+# weighted median posteriors from final null model, incorporate into ghost models
+ghost.model.1mar22.R
+ghost.model.v1.arr
+
+generateghosteabc.12apr22.R # process ghoste simulations & perform abc parameter inference
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+3.3.ghostw_parameter_inference/scripts
+
+# simulations 
+wanc.ghost.model.1apr22.R  # called by -
+wanc.ghost.model.v1.arr
+
+generatewghostabc.22apr22.R #ABC parameter inference for ghostw model
+
+#-----------------------------------------------------------------------------------------------------------------------
