@@ -1,1 +1,28 @@
-HP: add data & scripts
+4.1.model_comparison_simulations/scripts # scripts to generate 'model comparison' simulations under each of the 3 demographic models 
+# 10,000 reps generated per model using weighted median posteriors inferred in ABC parameter inference for demographic parameters
+
+# ghoste model (ghost gene flow to common ancestor of eastern gorillas)
+mc.ghoste.12apr22.R
+mc.ghoste.12apr22.arr
+
+# ghostw model (minimal ghost gene flow to common ancestor of all extant gorillas - 'ancestral population substructure' model)
+mc.ghostw.22apr22.R
+mc.ghostw.22apr22.arr
+
+# null model (plus non-interacting ghost population)
+mc.nullplghost.12apr22.R
+mc.nullplghost.12apr22.arr
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+4.1.model_comparison_simulations/output # simulation output as R objects (summary statistics)
+ghoste/ghoste/
+ghostw/ghostw
+nullplghost/nullplusghost
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+4.2.model_choice/scripts
+modelchoice.nullplghost.ghoste.ghostw.25apr22.R # model choice - compare null vs ghoste vs ghostw models
+
+#-----------------------------------------------------------------------------------------------------------------------
