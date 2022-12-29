@@ -1,5 +1,42 @@
 3.0.empirical_summary_stats # calculation of summary statistics in the empirical data
 
+# 3.0) equivalent summary statistics calculated for the empirical data: bit complicated structure, since had to recalculate & add new statistics during the process
+
+# original statistics
+stats.emp.data.clean3.R # called by
+stats.emp.data.arr
+
+# annotate 40kb windows from the empirical data with how informative they are (amount of data/snps within the window)
+# after filtering for repeats and mapability
+# then next step is filter by these windows - & only retain summary statistics in sufficiently informative windows
+get_clbl.1jul.R
+get_clbl.1jul.arr
+
+# filtered by the informative windows - & only retain summary statistics in sufficiently informative windows (>0.5)
+filter.het.by.clbl.26aug.R
+
+sites.wdata.31aug.R # following filter.het.by.clbl.26aug.R -> to determine proportion of sites in the informative windows
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# recalculate segregating sites & heterozygosity
+
+# - number of population-wise fixed sites and the number of population-wise segregating sites; 
+# - the fixed sites per individual
+segs.emp.27sep.R  # called by 
+het.emp.26aug.arr
+
+# - heterozygosity
+het.emp.31aug.R # called by het.emp.26aug.arr
+
+
+# process new stats & normalise by data coverage
+process.seg.emp.27sep.R
+
+# filtered by the informative windows - & only retain summary statistics in sufficiently informative windows (>0.5)
+filter.segs.by.clbl.27sep.R # run last
+
+#-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
 3.1.null_parameter_inference # ABC parameter inference: null model (extant gorillas) ABC output
