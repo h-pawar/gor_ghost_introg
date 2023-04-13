@@ -1,1 +1,39 @@
-ADD
+Assess different measures of mutational tolerance
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# GERP introgressed regions
+gerp.scores.21feb23.R
+
+# GERP random regions
+random.gerp.2mar23.R # called by
+random.gerp.23feb23.arr
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# SIFT introgressed regions
+sift.22feb23.R
+# SIFT random regions
+random.sift.24feb23.arr
+random.sift.24feb23.R
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# PolyPhen-2 introgressed regions
+polyphen.24feb23.R
+
+# PolyPhen-2 random regions
+random.polyphen.24feb23.arr
+random.polyphen.24feb23.R
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# LINSIGHT introgressed regions
+linsight.14mar23.R
+
+
+# LINSIGHT random regions
+random.linsight.20mar23.R
+random.linsight.20mar23.arr
+
+#-----------------------------------------------------------------------------------------------------------------------
