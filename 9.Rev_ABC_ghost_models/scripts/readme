@@ -1,1 +1,32 @@
-ADD
+# Revised ABC ghost parameter inference - sample all parameters from priors
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# MODEL D: Revised Ghost gene flow to eastern ancestor: sample all parameters from priors
+
+# 1) generate simulations for parameter inference & calculate summary stats  
+ghoste.rev.8feb23.arr
+ghoste.rev.8feb23.R
+# from these retain subset of simulations (from 15feb23) where archaic introgression time < species split time
+    # sumstat1_subs & param_subs R objects from retined subset of simns output in generateghoste.rev.abc.15feb23_subs.R
+
+# 1.1) add condition to retain only simulations where archaic introgression time < species split time → generate more simulations to get to ~35k (to make revised parameter inference complete)
+ghoste.rev.17feb23.arr
+ghoste.rev.17feb23.R
+
+# 2) process simulations & perform ABC parameter inference 
+generate.ghoste.rev.abc.20feb23.R # run interactively
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+
+# MODEL E: Revised Ghost gene flow to western ancestor: sample all parameters from priors
+# 1) generate simulations for parameter inference & calculate summary stats
+    #  retain only simulations where archaic introgression time < species split time
+ghostw.rev.17feb23.arr
+ghostw.rev.17feb23.R
+
+
+# 2) process simulations & perform ABC parameter inference 
+generate.ghostw.rev.abc.24feb23.R # run interactively
+#-----------------------------------------------------------------------------------------------------------------------
