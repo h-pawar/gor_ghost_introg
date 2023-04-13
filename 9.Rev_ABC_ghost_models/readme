@@ -1,0 +1,5 @@
+Subdirectories:
+
+scripts # scripts to generate simulations & perform ABC parameter inference for revised ghost models : models D & E
+
+scripts/model_comparison # # scripts to generate model comparison simulations for models D & E & to perform cross validation & model comparison between models A,B,C,D,E 
