@@ -1,1 +1,23 @@
-ADD
+# Generate model comparison simulations
+
+# Model D: Revised GHOSTE
+mc.ghoste.rev.21feb23.R # called by
+mc.ghoste.rev.21feb23.arr
+
+
+# Model E: Revised GHOSTW
+mc.ghostw.rev.24feb23.R  # called by
+mc.ghostw.rev.24feb23.arr
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# perform model comparison of models A,B,C,D,E
+rev.modelchoice.27feb23.R
+	# somewhat odd results obtained... -> unsure about this...
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# perform cross validation with 1000 reps (instead of 100, which was performed interactively) for the 5 models
+  crossvalidation.1mar23.R
+  crossvalidation.1mar23.arr
+
