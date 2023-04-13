@@ -22,3 +22,6 @@ random_mg_se_locations_20mar23.arr
 random.mg_se_locations_20mar23.R
 
 #-----------------------------------------------------------------------------------------------------------------------
+
+# over-representation analysis using webgestalt for genes regulated by sEs in MG introgressed regions & MG adaptive introgressed regions
+over.representation.genes.28mar23.sh  
