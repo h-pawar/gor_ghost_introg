@@ -1,1 +1,24 @@
-ADD
+Gorilla defined regulatory elements - defined by García-Perez et al. 2021 - https://www.nature.com/articles/s41467-021-23397-1
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# calculate total regulatory base pairs (bp) & regulatory bp per regulatory element type
+
+# introgressed regions
+gor_regelements_8feb23.R
+
+# random regions
+random.regelements.10feb23.R
+random.regelements.10feb23.arr
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+# gene regulatory architecture scripts
+# MG introgressed regions
+mg_se_locations_20mar23.R
+
+# random regions
+random_mg_se_locations_20mar23.arr
+random.mg_se_locations_20mar23.R
+
+#-----------------------------------------------------------------------------------------------------------------------
