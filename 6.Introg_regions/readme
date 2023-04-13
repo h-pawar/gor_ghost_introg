@@ -16,3 +16,7 @@ Characterising introgressed fragments
 
 6.7.pairwisebpdiff/scripts # pairwise base pair differences in putative introgressed regions across all gorilla individuals
 
+6.8.mutational tolerance/scripts # mutational tolerance of putative introgressed regions & of random genomic regions
+
+6.9.regulatory elements/scripts # gorilla-defined regulatory elements in putative introgressed regions & random genomic regions
+
