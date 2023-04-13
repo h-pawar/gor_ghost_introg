@@ -23,5 +23,14 @@ random.mg_se_locations_20mar23.R
 
 #-----------------------------------------------------------------------------------------------------------------------
 
+# annotate the sEs in MG introgressed regions with genes they regulate (take genes with 1:1 orthologs b/n human-chimp-gor-orang-macaque)
+# defined candidate gene sets & background gene sets for over-representation analysis
+# 2 candidate gene sets 
+	 # genes regulated by sEs in MG introgressed regions (235 genes)
+	 # genes regulated by sEs in MG adaptive introgressed regions (45 genes)
+# Background set - all genes regulated by sEs in gorillas (3010 genes)
+mg_check_genes_27mar23.R  
+
+
 # over-representation analysis using webgestalt for genes regulated by sEs in MG introgressed regions & MG adaptive introgressed regions
 over.representation.genes.28mar23.sh  
