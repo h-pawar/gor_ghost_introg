@@ -1,0 +1,53 @@
+description:
+  Gorilla null model. Retaining the ghost population, but without gene flow.
+time_units: generations
+demes:
+  - name: GorillaAncestor
+    epochs:
+    - {end_time: 180072, end_size: 80682}
+  - name: RecentAncestor
+    ancestors: [GorillaAncestor]
+    epochs:
+    - {end_time: 50815, end_size: 23298}
+  - name: Ghost
+    ancestors: [GorillaAncestor]
+    epochs:
+    - {end_time: 2000, end_size: 35381}
+  - name: EasternAncestor
+    ancestors: [RecentAncestor]
+    epochs:
+    - {end_time: 736, end_size: 23015}
+  - name: WesternAncestor
+    ancestors: [RecentAncestor]
+    epochs:
+    - {end_time: 23911, end_size: 99820}
+  - name: WesternLowland
+    ancestors: [WesternAncestor]
+    epochs:
+    - {end_time: 2152, start_size: 49691}
+    - {end_time: 0, start_size: 64748}
+  - name: CrossRiver
+    ancestors: [WesternAncestor]
+    epochs:
+    - {end_time: 0, end_size: 14559}
+  - name: Mountain
+    ancestors: [EasternAncestor]
+    epochs:
+    - {end_time: 490, start_size: 9911}
+    - {end_time: 480, start_size: 115}
+    - {end_time: 0, start_size: 2158}
+  - name: EasternLowland
+    ancestors: [EasternAncestor]
+    epochs:
+    - {end_time: 380, start_size: 21982}
+    - {end_time: 2, start_size: 243}
+    - {end_time: 0, start_size: 20894}
+pulses:
+  - sources: [WesternLowland]
+    dest: EasternAncestor
+    proportions: [0.0152]
+    time: 1789
+  - sources: [EasternAncestor]
+    dest: WesternLowland
+    proportions: [0.0083]
+    time: 1789

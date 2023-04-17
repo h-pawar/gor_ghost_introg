@@ -1,0 +1,57 @@
+description:
+  Gorilla ghost model.
+time_units: generations
+demes:
+  - name: GorillaAncestor
+    epochs:
+    - {end_time: 180072, end_size: 14364}
+  - name: RecentAncestor
+    ancestors: [GorillaAncestor]
+    epochs:
+    - {end_time: 50815, end_size: 14364}
+  - name: Ghost
+    ancestors: [GorillaAncestor]
+    epochs:
+    - {end_time: 2000, end_size: 35381}
+  - name: EasternAncestor
+    ancestors: [RecentAncestor]
+    epochs:
+    - {end_time: 792, end_size: 5325}
+  - name: WesternAncestor
+    ancestors: [RecentAncestor]
+    epochs:
+    - {end_time: 23911, end_size: 98135}
+  - name: WesternLowland
+    ancestors: [WesternAncestor]
+    epochs:
+    - {end_time: 2152, start_size: 48288}
+    - {end_time: 0, start_size: 64748}
+  - name: CrossRiver
+    ancestors: [WesternAncestor]
+    epochs:
+    - {end_time: 0, end_size: 14559}
+  - name: Mountain
+    ancestors: [EasternAncestor]
+    epochs:
+    - {end_time: 490, start_size: 3009}
+    - {end_time: 480, start_size: 115}
+    - {end_time: 0, start_size: 2158}
+  - name: EasternLowland
+    ancestors: [EasternAncestor]
+    epochs:
+    - {end_time: 380, start_size: 21982}
+    - {end_time: 2, start_size: 243}
+    - {end_time: 0, start_size: 20894}
+pulses:
+  - sources: [WesternLowland]
+    dest: EasternAncestor
+    proportions: [0.0027]
+    time: 1789
+  - sources: [EasternAncestor]
+    dest: WesternLowland
+    proportions: [0.0083]
+    time: 1789
+  - sources: [Ghost]
+    dest: EasternAncestor
+    proportions: [0.0247]
+    time: 2015

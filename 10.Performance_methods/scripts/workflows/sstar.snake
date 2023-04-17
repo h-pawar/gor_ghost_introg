@@ -1,0 +1,100 @@
+import sys
+sys.path.insert(0, './')
+
+import os
+import demes
+import numpy as np
+import pandas as pd
+from scipy.stats import norm
+from scipy.stats import nbinom
+from utils.utils import *
+
+
+try:
+    libr_dir = os.environ["CONDA_PREFIX"] + "/lib/R/library"
+except:
+    libr_dir = os.environ["CONDA"] + "/lib/R/library"
+
+
+configfile: "config/snakemake/config.yaml"
+
+ms_exec = config["ms_exec"]
+
+output_dir = config["output_dir"]
+replicates = config["replicates"]
+
+np.random.seed(config["seed"])
+
+seed_list = np.random.random_integers(1,2**31,replicates)
+demo_model_list = config["gorilla_models"]
+demo_list = ['GorillaGhostWorst']
+snp_num_list = np.arange(25,705,5)
+quantile_list = [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 0.98, 0.99, 0.995, 0.999]
+nref_list = [10]
+ntgt_list = [1]
+
+rule all:
+    input:
+        output_dir + "inference/sstar/sstar_accuracy.txt",
+
+
+rule sstar_score:
+    input:
+        vcf = output_dir + "simulated_data/{demog}/nref_{nref}/ntgt_{ntgt}/{seed}/sim1src.biallelic.vcf.gz",
+        ref_ind = "config/sstar/{demog}/nref_{nref}/ntgt_{ntgt}/sim.ref.ind.list",
+        tgt_ind = "config/sstar/{demog}/nref_{nref}/ntgt_{ntgt}/sim.tgt.ind.list",
+    output:
+        score = output_dir + "inference/sstar/{demog}/nref_{nref}/ntgt_{ntgt}/{seed}/sstar.1src.out.score",
+    params:
+        seq_len = lambda wildcards: 40000,
+    resources: time_min=3000, mem_mb=10000, cpus=1,
+    threads: 1,
+    shell:
+        """
+        sstar score --vcf {input.vcf} --ref {input.ref_ind} --tgt {input.tgt_ind} --output {output.score} --thread {threads} --win-len {params.seq_len} --win-step 10000
+        """
+        
+rule sstar_threshold:
+    input:
+        score = rules.sstar_score.output.score,
+        summary = output_dir + "inference/sstar/{demog}/quantiles/quantile.summary.txt",
+    output:
+        quantiles = output_dir + "inference/sstar/{demog}/nref_{nref}/ntgt_{ntgt}/{seed}/quantile.{quantile}.out",
+    params:
+        R_LIBS = libr_dir,
+    resources: time_min=3000, mem_mb=10000, cpus=1,
+    threads: 1,
+    shell:
+        """
+        export R_LIBS={params.R_LIBS}
+        sstar threshold --score {input.score} --sim-data {input.summary} --quantile {wildcards.quantile} --output {output.quantiles}
+        """
+
+rule sstar_process_output:
+    input:
+        quantiles = rules.sstar_threshold.output.quantiles,
+        true_tracts = output_dir + "simulated_data/{demog}/nref_{nref}/ntgt_{ntgt}/{seed}/sim1src.introgressed.tracts.bed",
+    output:
+        inferred_tracts = output_dir + "inference/sstar/{demog}/nref_{nref}/ntgt_{ntgt}/{seed}/quantile.{quantile}.out.bed",
+        accuracy = output_dir + "inference/sstar/{demog}/nref_{nref}/ntgt_{ntgt}/{seed}/quantile.{quantile}.out.accuracy",
+    resources: time_min=3000, mem_mb=10000, cpus=1,
+    threads: 1,
+    run:
+        process_sstar_1src_output(input.quantiles, output.inferred_tracts)
+        precision, recall = cal_accuracy(input.true_tracts, output.inferred_tracts)
+        with open(output.accuracy, 'w') as o:
+            o.write(f'{wildcards.quantile}\t{precision}\t{recall}\n')
+
+
+rule accuracy_summary:
+    input:
+        accuracy_files = expand(output_dir + "inference/sstar/{demog}/nref_{nref}/ntgt_{ntgt}/{seed}/quantile.{quantile}.out.accuracy",
+                                demog=demo_list, nref=nref_list, ntgt=ntgt_list, seed=seed_list, quantile=quantile_list),
+    output:
+        accuracy_table = output_dir + "inference/sstar/sstar_accuracy.txt",
+    resources: time_min=60, mem_mb=2000, cpus=1,
+    threads: 1,
+    shell:
+        """
+        cat {input.accuracy_files} | sed '1idemography\\tsample\\tcutoff\\tprecision\\trecall' > {output.accuracy_table}
+        """

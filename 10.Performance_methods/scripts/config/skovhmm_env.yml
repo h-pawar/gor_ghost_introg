@@ -1,0 +1,9 @@
+name: skovhmm-analysis
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bcftools
+  - python=2.7
+  - snakemake
+  - vcftools
