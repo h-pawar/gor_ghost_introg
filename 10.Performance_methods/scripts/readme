@@ -1,1 +1,5 @@
-ADD
+Workflow:
+1. workflows/simulation.snake: simulating data under the chosen model ('GorillaNull', 'GorillaGhost', 'GorillaGhostWorst', 'GorillaNullWorst').
+2. workflows/quantile.sh: calculating quantiles of expected S* scores from simulated data without introgression (more details in the sstar user guide).
+3. workflows/sstar.snake: calculating significant S* score thresholds using the quantiles from step 2.
+4. workflows/skovhmm.snake: run hmmix on simulated data to infer introgressed archaic segments.
