@@ -15,7 +15,7 @@ for (chrom in c(1:22,"X"))  {
     yy=yy+1;print(yy)
     if (yy==length(yle)) { break}
     intvl<-c(yle[yy],yle[yy+1])
-    agt<-system(paste("/apps/BCFTOOLS/1.9/bin/bcftools query -r chr",chrom,":",intvl[1],"-",intvl[2]," -u -f '%POS;[%AD ];[%GT ]\n' /scratch/devel/mkuhlwilm/gvcfs/greatapeN_"$chrom".vcf.gz",sep=""),intern=T)
+    agt<-system(paste("/apps/BCFTOOLS/1.9/bin/bcftools query -r chr",chrom,":",intvl[1],"-",intvl[2]," -u -f '%POS;[%AD ];[%GT ]\n' /scratch/devel/mkuhlwilm/arch/private/segsite_filt2_",chrom,".vcf.gz",sep=""),intern=T)
     if (length(agt)==0) { print("nolen"); next }
     agt<-do.call(rbind,strsplit(agt,split=";"))
     agp<-agt[,1]
