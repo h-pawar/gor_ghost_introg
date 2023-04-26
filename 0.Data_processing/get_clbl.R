@@ -10,16 +10,15 @@ print(chrom)
 '%ni%' <- Negate('%in%')
 
 ## these steps are necessary for creating specific ingroup and outgroup patterns
-grps<-unlist(read.table("/scratch/devel/mkuhlwilm/arch/groups.lst",sep="\t",as.is=T))
+grps<-unlist(read.table("/scratch/devel/mkuhlwilm/arch/groups.lst",sep="\t",as.is=T))[1:6]
 grn<-do.call(rbind,strsplit(do.call(rbind,strsplit(grps,split="/"))[,6],split="\\."))[,1]
 inds<-list();finds<-list()
-for ( i in (1:length(grps))) { inds[[i]]<-unlist(read.table(grps[i],sep="\t",as.is=T)); inds[[i]]<-inds[[i]][which(inds[[i]]%ni%c("Gorilla_beringei_graueri-Serufuli","Pan_troglodytes_schweinfurthii-Mgbadolite"))]   }
-indlist<-c(1:3,unlist(read.table("/scratch/devel/mkuhlwilm/ga/findivs.txt",header=F,as.is=T,sep="\t")))
+for ( i in (1:length(grps))) { inds[[i]]<-unlist(read.table(grps[i],sep="\t",as.is=T)) }
+indlist<-c(1:3,unlist(read.table("/scratch/devel/mkuhlwilm/ga/findivsN.txt",header=F,as.is=T,sep="\t")))
 for (i in 1:length(grps)) { finds[[i]]<-which(indlist%in%inds[[i]]) }
 fugrp<-unlist(read.table("/scratch/devel/mkuhlwilm/arch/species.lst",sep="\t",as.is=T))
 fugrp<-cbind(c(paste("gorilla_",1:6,sep=""),paste("pan_",1:6,sep=""),paste("hum_",1:2,sep=""),paste("ora_",1:4,sep=""),paste("hupa",1:2,sep="")),c(rep(fugrp[1],6),rep(fugrp[2],6),rep(fugrp[3],2),rep(fugrp[4],4),rep(fugrp[5],2)))
 minds<-list();funds<-list()
-for ( i in (1:length(grps))) { minds[[i]]<-unlist(read.table(fugrp[i,2],sep="\t",as.is=T)); minds[[i]]<-minds[[i]][which(minds[[i]]%ni%c("Gorilla_beringei_graueri-Serufuli","Pan_troglodytes_schweinfurthii-Mgbadolite"))]   }
 for (i in 1:length(grps)) { funds[[i]]<-which(indlist%in%minds[[i]] & indlist%ni%inds[[i]]) }
 atyp=unique(fugrp[,2])
 
