@@ -1,3 +1,4 @@
-** Initial data processing **
-processing.sh: obtaining high-confidence genotype files for S*
+Initial data processing
 
+processing.sh: obtaining high-confidence genotype files for S*
+filter_hets.R: identifying allele-imbalanced heterozygous positions
