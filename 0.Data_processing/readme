@@ -1,4 +1,4 @@
 Initial data processing
 
-processing.sh: obtaining high-confidence genotype files for S*
+processing.sh: processing and filtering of VCF files
 filter_hets.R: identifying allele-imbalanced heterozygous positions
