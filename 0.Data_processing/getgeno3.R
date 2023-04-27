@@ -27,11 +27,7 @@ ip=as.numeric(chrom)
 
 ft=2 
 
-  spec=unlist(strsplit(grn[ip],split="_"))[1]
-  spec<-ifelse(spec=="pan","pans",spec)
-  spec<-ifelse(spec=="hum","human",spec)
-  spec<-ifelse(spec=="ora","orang",spec)
-  spec<-ifelse(spec%in%c("hupa1","hupa2"),"hupa",spec)
+  spec="pans"
   tm1<-read.table(paste("/scratch/devel/mkuhlwilm/arch/N",ft,"_",spec,"_weights_float.txt.gz",sep=""),as.is=T,header=F)
   tm<-paste(tm1[,1],":",tm1[,2],sep="")
   for (ind in (funds[[ip]])) {
