@@ -1,1 +1,15 @@
-Application of Skov HMM: MK analysis
+Application of hmmix
+
+* Apply hmmix ("Introgression detection")
+module load gcc/6.3.0 python/2.7.14
+spec="gorilla"
+typ="EG"
+/apps/PYTHON/2.7.14/AVX0/GCC/bin/python2 /home/devel/mkuhlwilm/programs/skov/Introgression-detection-5/Train.py <(zcat /scratch/devel/mkuhlwilm/arch/private/"$typ"/fin/"$ind"_observations2.txt.gz ) "$typ"/B_trained_"$ind" ../Model"$MO"b.hmm <( zcat /scratch/devel/mkuhlwilm/arch/N2_"$spec"_weights_float.txt.gz ) <( zcat /scratch/devel/mkuhlwilm/arch/mura/mura_"$spec".mut.gz)
+
+* Decoding
+module load gcc/6.3.0 python/2.7.14 tabix
+/apps/PYTHON/2.7.14/AVX0/GCC/bin/python /home/devel/mkuhlwilm/programs/skov/Introgression-detection-5/Decode.py <(zcat /scratch/devel/mkuhlwilm/arch/private/"$typ"/fin/"$ind"_observations2.txt.gz ) "$typ"/decoded_"$ind" "$typ"/trained_"$ind".hmm <( zcat /scratch/devel/mkuhlwilm/arch/N2_"$spec"_weights_float.txt.gz ) <( zcat /scratch/devel/mkuhlwilm/arch/mura/mura_"$spec".mut.gz) 1000
+
+* Calculating statistics
+
+
