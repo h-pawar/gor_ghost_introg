@@ -1,4 +1,8 @@
-SOM 2. ABC modelling
+SOM 2. admixturegraphs
+see Rscript: admixturegraphs.R
+
+
+SOM 3. ABC modelling
 
 initial.simns/ 2.1 Initial simulation approach
 correlate_decorrelate/  2.2 Summary statistic decorrelation
