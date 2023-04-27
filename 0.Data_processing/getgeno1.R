@@ -14,11 +14,8 @@ inds<-list();finds<-list()
 for ( i in (1:length(grps))) { inds[[i]]<-unlist(read.table(grps[i],sep="\t",as.is=T)) }
 indlist<-c(1:3,unlist(read.table("/scratch/devel/mkuhlwilm/ga/findivsN.txt",header=F,as.is=T,sep="\t")))
 for (i in 1:length(grps)) { finds[[i]]<-which(indlist%in%inds[[i]]) }
-fugrp<-unlist(read.table("/scratch/devel/mkuhlwilm/arch/species.lst",sep="\t",as.is=T))
-fugrp<-cbind(c(paste("gorilla_",1:6,sep=""),paste("pan_",1:6,sep=""),paste("hum_",1:2,sep=""),paste("ora_",1:4,sep=""),paste("hupa",1:2,sep="")),c(rep(fugrp[1],6),rep(fugrp[2],6),rep(fugrp[3],2),rep(fugrp[4],4),rep(fugrp[5],2)))
-minds<-list();funds<-list()
-for (i in 1:length(grps)) { funds[[i]]<-which(indlist%in%minds[[i]] & indlist%ni%inds[[i]]) }
-
+funds<-list()
+for (i in 1:length(grps)) { funds[[i]]<-which(indlist%ni%inds[[i]]) }
 
 ############################################################
 ## first, do the filtering for each individual
