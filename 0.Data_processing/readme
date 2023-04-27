@@ -1,4 +1,13 @@
 Initial data processing
 
-processing.sh: processing and filtering of VCF files
-filter_hets.R: identifying allele-imbalanced heterozygous positions
+Main procedures described in:
+* processing.sh: processing and filtering of VCF files
+
+Other scripts:
+* filter_hets.R: identifying allele-imbalanced heterozygous positions
+* get_clbl.R: create weights files for hmmix
+* getgeno1.R: filtering per individual for hmmix
+* getgeno2.R: create R objects with observation files (hmmix format)
+* getgeno3.R: write observation files in hmmix format
+* geno_eigen.R: convert genotype matrix to eigenstrat format
+
