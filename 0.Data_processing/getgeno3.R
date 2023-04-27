@@ -27,7 +27,7 @@ ip=as.numeric(chrom)
 
 ft=2 
 
-  spec="pans"
+  spec="gorilla"
   tm1<-read.table(paste("/scratch/devel/mkuhlwilm/arch/N",ft,"_",spec,"_weights_float.txt.gz",sep=""),as.is=T,header=F)
   tm<-paste(tm1[,1],":",tm1[,2],sep="")
   for (ind in (funds[[ip]])) {
