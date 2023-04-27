@@ -47,10 +47,14 @@ for chrom in 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X
 
 ## get observations file using an R script
 module load TABIX/0.2.6 gcc/6.3.0 xz python/2.7.11 R/3.2.0 perl BCFTOOLS/1.6 SAMTOOLS/1.0 BEDTools/2.26.0 bedops vcftools
-# per chromosome
+# per chromosome: filter data individual-wise
 R CMD BATCH --vanilla --slave "--args ${chrom}" /home/devel/mkuhlwilm/programs/getgeno1.R
 
-
+# per chromosome: turn into observation file format
 R CMD BATCH --vanilla --slave "--args ${chrom}" /home/devel/mkuhlwilm/programs/getgeno2.R
 
-R CMD BATCH --vanilla --slave "--args ${chrom}" /home/devel/mkuhlwilm/programs/getgeno.R
+# per group: check output and write files
+R CMD BATCH --vanilla --slave "--args ${chrom}" /home/devel/mkuhlwilm/programs/getgeno3.R
+
+## step 6: convert to eigenstrat format
+R CMD BATCH --vanilla --slave "--args ${chrom}" /home/devel/mkuhlwilm/programs/geno_eigen.R
