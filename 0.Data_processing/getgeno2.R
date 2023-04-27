@@ -34,7 +34,6 @@ rn<-sample(1:10000)
 tfun<-function(v,v1,v2) { paste(v2[which(v1==v)],collapse="," ) }
 
   ft=2  
-  ##  first time
     ## this function turns the matrix into a vcftools freq type file, for a given individual, and immediately does the work of the Filtervariants script from Skov, just correctly this time; the output is directed to the final observations file
     tfunc<-function(ip,funds,finds,agt,apo,chrom,grn,intv) {
       indp=finds[[ip]]
