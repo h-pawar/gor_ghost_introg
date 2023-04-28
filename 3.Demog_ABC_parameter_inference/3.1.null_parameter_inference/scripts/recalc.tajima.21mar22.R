@@ -1,12 +1,6 @@
 #!/usr/bin/r
 # Mon 21 Mar 2022 16:56:16 CET
-# in /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/simul_postabc/abc+ghost/troubleshoot.tajimasd.21mar22.R
-# found a bug in how I was calculating the tajimas d statistic. ie I was treating the object the same as that for pi, but they differ in dimensions (line 500 of the above R script).
-# =>  I need to recalculate this statistic for all the ~35,700 null demography simulations.
-# I will regenerate these simulations, & only calculate the values for tajimas d - outputting the mean & sd per iter, & the object with the value per window.
-
-# following /scratch/devel/hpawar/admix/abc/simul/scripts/test.abc.model.v5.R 
-# with amended tajimas d stat from /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/simul_postabc/abc+ghost/troubleshoot.tajimasd.21mar22.R
+# found a bug in how I was calculating the tajimas d statistic =>  recalculate this statistic for all the ~35,700 null demography simulations.
 #------------------------------------------------------------------------------------------------------------------------
 #module load gcc/6.3.0 R/3.4.2
 # for troubleshooting
@@ -19,14 +13,11 @@ library(mgcv)
 library(gap)
 library(parallel)
 library('pegas')
-## see below what ptype stands for
-  # ptype = array number
+# ptype = array number
 ptype=(commandArgs(TRUE))
-#ptype=1 # for troubleshooting purposes
 ptype=as.numeric(as.character(ptype))
 print(ptype)
 options(scipen=100)
-# Thu  3 Jun 2021 12:49:00 CEST MK - If half the data takes 40min, you can launch jobs with 51 iterations on 4 CPUs, which should take ~8.5h, so you can set 9h for the time. 
 iter=51
 
 # random numbers
@@ -44,7 +35,6 @@ mr<-mura*slen*4000 ## scaled mutation rate
   # reference N = 1000
   # => mu * length of fragment * 4 * 1000
 sdv=mr*0.233
-# standard deviation of the mutation rate - whether this should indeed be *0.233 for gor? ask ** use as a starting point
 recv<-rbm*4000*slen
 # scaled recombination rate. R * 4 * N * length of fragment
 
