@@ -14,7 +14,7 @@
 ID=$SLURM_ARRAY_TASK_ID
 
 # array = 1-700
-# 2h sufficient when using mclapply across 6 cores
+# 2h sufficient when using mclapply across 6 cores for most reps
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Recalculate tajimas d for the null demog simulations
