@@ -207,79 +207,7 @@ summary(myabc_5apr22)
 save(myabc_5apr22,file=paste("/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/myabc_5apr22"))
 save(sumstat2,file=paste("/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/sumstat2_5apr22"))
 
-# transfer from cluster to local & plot
-#scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/myabc_5apr22 /Users/harvi/Downloads/gorilla_abc/11sep21simns/segrecalc
-#scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/sumstat2_5apr22 /Users/harvi/Downloads/gorilla_abc/11sep21simns/segrecalc
-#g6n.tm4D2L73
 
-
-
-# save output
-
-# also run with alt way of calculating tajimas d
-  # & compare these 2 ways of calculating *
-
- > myabc_5apr22
-Call:
-abc(target = target1, param = param, sumstat = sumstat2, tol = 0.005, 
-    method = "neuralnet", transf = "logit", logit.bounds = prior_ranges, 
-    numnet = 100)
-Method:
-Non-linear regression via neural networks
-with correction for heteroscedasticity
-
-Parameters:
-w_lowl_t0, w_cros_t0, e_lowl_t0, e_moun_t0, e_lowl_t1, e_lowl_t2, e_moun_t3, e_moun_t3.1, t4, e_anc_t4, t5, w_lowl_t5, admix_w_e_t6, admix_e_w_t6, t7, w_anc_t7, t8, gor_anc
-
-Statistics:
-het_mu_WL, het_mu_WC, het_mu_EL, het_mu_EM, het_sd_WL, het_sd_EL, het_sd_EM, fixedsites_WL, fixedsites_WC, fixedsites_EL, fixedsites_EM, segsites_WL, segsites_WC, segsites_EL, segsites_EM, fixedperid_mu_WL, fixedperid_mu_WC, fixedperid_mu_EL, fixedperid_mu_EM, fixedperid_sd_WL, fixedperid_sd_EL, fixedperid_sd_EM, fst_WL.WC, fst_WL.EL, fst_WL.EM, fst_WC.EL, fst_WC.EM, fst_EL.EM, pi_mu_WL, pi_mu_EL, pi_mu_EM, pi_sd_WL, pi_sd_EL, pi_sd_EM, tajima_mu_WL, tajima_mu_EL, tajima_mu_EM, tajima_sd_WL, tajima_sd_EL, tajima_sd_EM
-
-Total number of simulations 35543 
-
-Number of accepted simulations:  178 
-
-> summary(myabc_5apr22)
-Call: 
-abc(target = target1, param = param, sumstat = sumstat2, tol = 0.005, 
-    method = "neuralnet", transf = "logit", logit.bounds = prior_ranges, 
-    numnet = 100)
-Data:
- abc.out$adj.values (178 posterior samples)
-Weights:
- abc.out$weights
-
-                       w_lowl_t0 w_cros_t0 e_lowl_t0 e_moun_t0 e_lowl_t1
-Min.:                    24.0772    1.4641    0.9005    0.5445    0.0875
-Weighted 2.5 % Perc.:    29.7673    5.7072    1.7186    0.8017    0.1107
-Weighted Median:         66.0631   13.5755   20.9691    2.5202    0.2605
-Weighted Mean:           65.7924   13.4357   19.5982    3.2900    0.2975
-Weighted Mode:           66.2059   11.3421   26.8231    2.0618    0.2148
-Weighted 97.5 % Perc.:   94.3898   19.5507   29.8148   10.1643    0.7918
-Max.:                    97.8154   19.9128   29.9728   18.0409    5.5104
-                       e_lowl_t2 e_moun_t3 e_moun_t3.1      t4 e_anc_t4      t5
-Min.:                     1.9154    0.0102      0.9816  0.1427   1.1005  0.2294
-Weighted 2.5 % Perc.:     4.2507    0.0162      1.7916  0.1489   1.8424  0.2799
-Weighted Median:         19.6131    0.1742      7.1596  0.1894   6.5868  0.5177
-Weighted Mean:           18.2514    0.3471      8.4715  0.1931   8.2575  0.4944
-Weighted Mode:           22.0536    0.1022      5.3544  0.1856   4.4518  0.5413
-Weighted 97.5 % Perc.:   24.6268    2.0573     18.7359  0.2379  24.0880  0.5928
-Max.:                    24.9982    3.2491     19.9335  0.2491  28.3913  0.5992
-                       w_lowl_t5 admix_w_e_t6 admix_e_w_t6      t7 w_anc_t7
-Min.:                    19.6881       2.4435       0.2311  5.5413  86.3465
-Weighted 2.5 % Perc.:    36.8678       5.4291       2.6746  5.6847  88.5089
-Weighted Median:         46.9481      59.6369      35.1565  5.9324  96.9035
-Weighted Mean:           45.7180      56.5273      36.8365  5.9057  95.8687
-Weighted Mode:           48.0186      77.4935      11.4183  5.9463  97.5276
-Weighted 97.5 % Perc.:   49.4398      99.1490      87.4340  5.9862  99.5861
-Max.:                    49.9735      99.6090      99.2944  5.9934  99.9108
-                            t8 gor_anc
-Min.:                   5.3974 10.0928
-Weighted 2.5 % Perc.:   8.7031 10.4331
-Weighted Median:       11.6819 14.3404
-Weighted Mean:         11.6275 14.8813
-Weighted Mode:         11.7384 13.7842
-Weighted 97.5 % Perc.: 14.2486 22.5235
-Max.:                  14.7692 55.3827 
 #-----------------------------------------------------------------------------------------------------------------------
 
 setwd("/Users/harvi/Downloads/gorilla_abc/11sep21simns/segrecalc")
@@ -301,41 +229,7 @@ dev.off()
 #-----------------------------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------------------------
-# the differences b/n thse are so small, unlikely to impact? stick with first way of calculating?
-
-# 1) rm nas in tajima d calc
-> summary(tajima_df)
-       X1                X2                 X3                 X4        
- Min.   :-1.6629   Min.   :-1.78775   Min.   :-1.88787   Min.   :0.2808  
- 1st Qu.:-0.2081   1st Qu.:-0.05374   1st Qu.:-0.03062   1st Qu.:0.6444  
- Median : 0.1549   Median : 0.21959   Median : 0.28464   Median :0.7569  
- Mean   : 0.1028   Mean   : 0.18114   Mean   : 0.22864   Mean   :0.7979  
- 3rd Qu.: 0.4414   3rd Qu.: 0.46775   3rd Qu.: 0.56231   3rd Qu.:0.9279  
- Max.   : 1.4336   Max.   : 1.14613   Max.   : 1.34788   Max.   :1.6127  
-       X5               X6        
- Min.   :0.4126   Min.   :0.3641  
- 1st Qu.:0.8233   1st Qu.:0.8357  
- Median :0.9145   Median :0.9357  
- Mean   :0.9316   Mean   :0.9485  
- 3rd Qu.:1.0117   3rd Qu.:1.0399  
- Max.   :1.7947   Max.   :1.9308
-
- # 2) set nas to 0  
-> summary(tajima_df_1)
-       X1                X2                 X3                 X4        
- Min.   :-1.6629   Min.   :-1.78775   Min.   :-1.88636   Min.   :0.2808  
- 1st Qu.:-0.2081   1st Qu.:-0.05196   1st Qu.:-0.03062   1st Qu.:0.6444  
- Median : 0.1549   Median : 0.21776   Median : 0.28431   Median :0.7569  
- Mean   : 0.1028   Mean   : 0.17906   Mean   : 0.22745   Mean   :0.7979  
- 3rd Qu.: 0.4414   3rd Qu.: 0.46468   3rd Qu.: 0.55936   3rd Qu.:0.9279  
- Max.   : 1.4336   Max.   : 1.14429   Max.   : 1.34626   Max.   :1.6127  
-       X5               X6        
- Min.   :0.2756   Min.   :0.3660  
- 1st Qu.:0.8216   1st Qu.:0.8357  
- Median :0.9128   Median :0.9356  
- Mean   :0.9262   Mean   :0.9473  
- 3rd Qu.:1.0089   3rd Qu.:1.0397  
- Max.   :1.7168   Max.   :1.9297  
+# the differences b/n the results, using as input the two ways of calculating tajimas d are small 
 
 
  # null ABC parameter inference setting nas to 0
@@ -351,10 +245,10 @@ prior_ranges<-data.matrix(priordf)
 
 myabc_5apr22_1<-abc(target=target1,param=param,tol=0.005,sumstat=sumstat3,method="neuralnet",numnet=100,transf="logit",logit.bounds=prior_ranges)
 
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
-Warning message:
-All parameters are "logit" transformed. 
+#123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
+#123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
+#Warning message:
+#All parameters are "logit" transformed. 
 
 myabc_5apr22_1[[17]][[1]]<-colnames(param)
 myabc_5apr22_1[[17]][[2]]<-names(target1)
@@ -366,75 +260,6 @@ summary(myabc_5apr22_1)
 save(myabc_5apr22_1,file=paste("/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/myabc_5apr22_nasto0"))
 save(sumstat3,file=paste("/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/sumstat3_5apr22_nasto0"))
 
-
-> myabc_5apr22_1
-Call:
-abc(target = target1, param = param, sumstat = sumstat3, tol = 0.005, 
-    method = "neuralnet", transf = "logit", logit.bounds = prior_ranges, 
-    numnet = 100)
-Method:
-Non-linear regression via neural networks
-with correction for heteroscedasticity
-
-Parameters:
-w_lowl_t0, w_cros_t0, e_lowl_t0, e_moun_t0, e_lowl_t1, e_lowl_t2, e_moun_t3, e_moun_t3.1, t4, e_anc_t4, t5, w_lowl_t5, admix_w_e_t6, admix_e_w_t6, t7, w_anc_t7, t8, gor_anc
-
-Statistics:
-het_mu_WL, het_mu_WC, het_mu_EL, het_mu_EM, het_sd_WL, het_sd_EL, het_sd_EM, fixedsites_WL, fixedsites_WC, fixedsites_EL, fixedsites_EM, segsites_WL, segsites_WC, segsites_EL, segsites_EM, fixedperid_mu_WL, fixedperid_mu_WC, fixedperid_mu_EL, fixedperid_mu_EM, fixedperid_sd_WL, fixedperid_sd_EL, fixedperid_sd_EM, fst_WL.WC, fst_WL.EL, fst_WL.EM, fst_WC.EL, fst_WC.EM, fst_EL.EM, pi_mu_WL, pi_mu_EL, pi_mu_EM, pi_sd_WL, pi_sd_EL, pi_sd_EM, tajima_mu_WL, tajima_mu_EL, tajima_mu_EM, tajima_sd_WL, tajima_sd_EL, tajima_sd_EM
-
-Total number of simulations 35543 
-
-Number of accepted simulations:  178 
-
-> summary(myabc_5apr22_1)
-Call: 
-abc(target = target1, param = param, sumstat = sumstat3, tol = 0.005, 
-    method = "neuralnet", transf = "logit", logit.bounds = prior_ranges, 
-    numnet = 100)
-Data:
- abc.out$adj.values (178 posterior samples)
-Weights:
- abc.out$weights
-
-                       w_lowl_t0 w_cros_t0 e_lowl_t0 e_moun_t0 e_lowl_t1
-Min.:                    18.6785    2.4617    1.1564    0.4127    0.0689
-Weighted 2.5 % Perc.:    23.7580    6.9591    2.3079    0.7191    0.0760
-Weighted Median:         64.7488   14.5582   20.8943    2.1578    0.2431
-Weighted Mean:           64.2682   14.3019   19.7667    2.8079    0.2939
-Weighted Mode:           64.3838   12.5476   26.5448    1.6796    0.1987
-Weighted 97.5 % Perc.:   95.9855   19.6304   29.7763    7.6795    0.9448
-Max.:                    98.5050   19.9268   29.9695   18.4970    6.5620
-                       e_lowl_t2 e_moun_t3 e_moun_t3.1      t4 e_anc_t4      t5
-Min.:                     3.0980    0.0102      1.5664  0.1409   0.6859  0.2140
-Weighted 2.5 % Perc.:     8.0031    0.0150      2.9191  0.1446   1.4730  0.2839
-Weighted Median:         21.9824    0.1150      9.9114  0.1839   5.3253  0.5381
-Weighted Mean:           20.4935    0.2137     10.5400  0.1898   7.1841  0.5104
-Weighted Mode:           23.0154    0.0671      8.0002  0.1781   3.3288  0.5605
-Weighted 97.5 % Perc.:   24.6869    1.4780     19.1638  0.2420  23.0154  0.5976
-Max.:                    24.9932    2.0316     19.9673  0.2493  25.9505  0.5998
-                       w_lowl_t5 admix_w_e_t6 admix_e_w_t6      t7 w_anc_t7
-Min.:                    27.1977       3.4615       0.1966  5.8086  84.3330
-Weighted 2.5 % Perc.:    42.6356       6.7955       2.4079  5.8920  91.4236
-Weighted Median:         48.2880      61.0343      33.0968  5.9778  98.1352
-Weighted Mean:           47.5893      57.7143      35.0435  5.9679  97.0822
-Weighted Mode:           48.9181      74.8586      11.6146  5.9832  98.6423
-Weighted 97.5 % Perc.:   49.6917      99.2159      85.7601  5.9965  99.8200
-Max.:                    49.9827      99.3275      98.7843  5.9978  99.9794
-                            t8 gor_anc
-Min.:                   5.6924 10.0954
-Weighted 2.5 % Perc.:   9.5956 10.4147
-Weighted Median:       12.7037 14.3641
-Weighted Mean:         12.5051 14.9677
-Weighted Mode:         12.8369 12.9148
-Weighted 97.5 % Perc.: 14.5240 23.2983
-Max.:                  14.8802 57.1283
-
-
-
-# transfer from cluster to local & plot
-#scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/myabc_5apr22_nasto0 /Users/harvi/Downloads/gorilla_abc/11sep21simns/segrecalc
-#scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/sumstat3_5apr22_nasto0 /Users/harvi/Downloads/gorilla_abc/11sep21simns/segrecalc
-#g6n.tm4D2L73
 
 setwd("/Users/harvi/Downloads/gorilla_abc/11sep21simns/segrecalc")
 require(data.table)
