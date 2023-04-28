@@ -16,5 +16,5 @@
 module load gcc/6.3.0 openssl/1.0.2q R/4.0.1
 
 # Sat 22 Oct 2022 12:17:00 CEST
-# perform 100 iterations of random intersects - generating random regions of sufficient callable sites
+# perform 100 iterations of random intersects - generating random regions of sufficient callable sites & calc gene density
 Rscript --vanilla  /scratch/devel/hpawar/admix/sstar/scripts/simul_postabc/downstream/random.gene.density.s*skov.overlap.21oct22.R
