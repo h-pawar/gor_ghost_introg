@@ -2,16 +2,9 @@
 
 # plot pcas of private intersect regions (99_s* - strict skov)
 
-#amending from /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/simul_postabc/plot_pca_sstarskov_27jul22.R # ran interactively
-
-
-# amending from /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/simul_postabc/plot_pca_skov_16jun22.R & referring back to /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/simul_postabc/plot_pca_skov_23may22.R
-
-
 # same x axis, y axis scale for pcs of empirical & random reps, ie adding equal axes for comparable plots (emp & random pc for same individual)
 
 #-----------------------------------------------------------------------------------------------------------------------
-# MK Wed, 18 May, 21:01 
 #for the PCA, one random replicate should be enough for the comparison,
 # as it should show the "usual" genome-wide pattern. 
 # The best would be side-by-side PC1/2 for introgressed vs random regions,
@@ -95,37 +88,6 @@ z<-cbind(x,y)
 return(z)
 }
 #-----------------------------------------------------------------------------------------------------------------------
-
-    # input=pca_obj, input2=random_pca_obj # for testing, x1=1, y1=2 (ie testing for PC1 PC2)
-#check_limits_pca(pca_obj,1,2,random_pca_obj) # works
-
-#> check_limits_pca(pca_obj,1,2,random_pca_obj)
-#           [,1]     [,2]      [,3]     [,4]
-# [1,] -278.8890 176.4082 -211.3981 173.1496
-# [2,] -297.2078 191.7174 -236.6585 177.0709
-# [3,] -301.2560 189.6148 -234.6338 169.0107
-# [4,] -282.2050 179.0733 -217.4041 188.8875
-# [5,] -295.8610 192.9288 -232.1909 196.9267
-# [6,] -300.1648 193.7878 -231.4551 169.3754
-# [7,] -287.5825 186.7556 -222.5503 186.0367
-# [8,] -292.2520 192.1551 -224.6602 201.7710
-# [9,] -290.5079 189.3965 -233.6349 166.3475
-#[10,] -266.7869 166.8228 -203.0646 164.5097
-#[11,] -279.1568 179.5897 -218.0020 159.3463
-#[12,] -286.9119 186.4577 -225.4129 161.5617
-
-# then add these into the plot_pca function, to call these as limits
-
-# each row is 1 individual, : xlower, xupper, ylower, yupper
-#> lims[1,]
-#[1] -278.8890  176.4082 -211.3981  173.1496
-
-#+ xlim(limits[i,][1], limits[i,][2]) + ylim(limits[i,][3], limits[i,][4])
-
-# where limits: need to be calculated separately for pc1/2, pc3/4
-
-#lims_12<-check_limits_pca(pca_obj,1,2,random_pca_obj)
-#lims_34<-check_limits_pca(pca_obj,3,4,random_pca_obj)
 
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -223,8 +185,6 @@ hold_plots[[i]]<-ggarrange(test_12,rand_12,test_34,rand_34, ncol = 2, nrow = 2)
 }
 
 
-#[hpawar@login1 ~]$ mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/privateregionsperid/GBG/plot_pca
-#[hpawar@login1 ~]$ mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/privateregionsperid/GBB/plot_pca
 
 # replot
 
@@ -238,14 +198,6 @@ dev.off()
 # generated for all ids of the first scenario
 #-----------------------------------------------------------------------------------------------------------------------
 
-#mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid/GBG/plot_pca
-#mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid/GBB/plot_pca
-
-
-#scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid/GBB/regi_pca/gbb.allids.allintrogregions.pca.27jul22.pdf  /Users/harvi/Downloads/gorilla_postabc/skov/GBB
-# works & looks fine
-
-# perform the same for GBG, & the 40kb reps (these are pcas of all introg regions or filtered by length >=40kb), then for the pcas of regions private to a given individual
 #-----------------------------------------------------------------------------------------------------------------------
 
 # 2) read in data for GBG .pca
@@ -295,5 +247,3 @@ dev.off()
 
 q()
 
-scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/'overlap.s*.skov'/privateregionsperid/GBG/plot_pca/gbg.allids.privateintrogregions.pca.30sep22.pdf /Users/harvi/Downloads/gorilla_postabc/overlap.sstar.skov/pca
-scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/'overlap.s*.skov'/privateregionsperid/GBB/plot_pca/gbb.allids.privateintrogregions.pca.30sep22.pdf /Users/harvi/Downloads/gorilla_postabc/overlap.sstar.skov/pca
