@@ -46,9 +46,9 @@ genomewide[[i]]<-stats_inform1
 }
 
 #replace NaN values with 0
+#MK: If they are NaN (not a number), they are due to division by zero (I guess actually often 0/0) and might be corrected to 0 instead. 
 find.nas_fun1<-function(x) {
 for (j in 1:length(genomewide[[x]])){
-    # convert window info from character -> numeric - so do not lose this info when replacing non-finite numbers with 0
 genomewide[[x]][[j]][[1]]<-as.numeric(genomewide[[x]][[j]][[1]])
 }
 out_1<-list()
@@ -58,18 +58,11 @@ out_1[[j]]<-lapply(genomewide[[x]][[j]], function(y) replace(y, !is.finite(y), 0
 return(out_1)
 }
 
-#MK: If they are NaN (not a number), they are due to division by zero (I guess actually often 0/0) and might be corrected to 0 instead. 
-
-# run for all 22 chr
 finalwindows=list()
 for (i in 1:length(genomewide)){
 finalwindows[[i]]<-find.nas_fun1(i)
 }
 
-#> str(genomewide_out)
-#List of 22
-# $ :List of 1735
-#  ..$ :List of 6
 #-----------------------------------------------------------------------------------------------------------------------
 
 format_stats_fun<-function(x,y) {
@@ -82,7 +75,6 @@ return(outest)
 }
 
 
-# could write this second section into a function also - yes => applicable for all summary stats
 stats_asdf_fun<-function(x){
 stats_o=list()
 for (i in 1:22){
@@ -102,41 +94,14 @@ for (i in 1:ncol(fst_df)){
 inf_fsts[[i]]<-which(fst_df[,i] > 1)
 }
 
-#sort(unlist(inf_fsts))
-# [1]   551   741   984  1820  2339  2781  3202  3216  4047  4047  4461  5887
-#[13]  6161  7976  9234  9234  9888 10136 10235 10304 10743 12926 12973 13803
-#[25] 14435 15478 16690 16899 17010 17010 17369 17369 17402 18040 18275 19526
-#[37] 19781 19860 20050 20353 20745 20878 20977 22584 22734 22779 22842 23572
-#[49] 24226 24383 24901 24901 25196 25276 27006 27006 27104 28020 28474 28488
-#[61] 28661 29120 29614 29624 29645 30666 30822 31228
 
-#fst_df[551,]
-#           X1        X2        X3              X4        X5        X6
-#551 0.8502885 0.1604438 0.1859062 269122666808322 0.4949833 0.1756261
- 
-# fst_df[741,]
-#            X1        X2        X3        X4              X5       X6
-#741 0.09075206 0.2516275 0.2162011 0.5186349 299325369861235 0.133672
-
-#length(sort(unlist(inf_fsts)))
-#[1] 68
 
 #-----------------------------------------------------------------------------------------------------------------------
-# me
-#1. for the empirical data after replacing NaNs and Inf with 0 there remains 68 windows with 
-#fsts > 1 - can I remove these windows? As it looks like something has gone wrong there (eg below).
 
-#MK
-#good that you checked that! Indeed, this FST seems to be an error.
-#-----------------------------------------------------------------------------------------------------------------------
 
 fst_df1<-fst_df[-c(sort(unlist(inf_fsts))),]
 
-#sapply(fst_df1, mean) # more normal vals
-#   X1        X2        X3        X4        X5        X6 
-#0.1344107 0.1852550 0.1766149 0.3601883 0.3375883 0.2005140 
-
-# remove the same rows from the other dfs **
+# remove the same rows from the other dfs (those with infinite fst vals) **
 
 pi_df1<-pi_df[-c(sort(unlist(inf_fsts))),]
 tajima_df1<-tajima_df[-c(sort(unlist(inf_fsts))),]
@@ -282,7 +247,7 @@ fixedsitesperid_em<-fixedsitesperid_asdf_fun(4,1)
 fixedsitesperid_em1<-fixedsitesperid_em[-c(sort(unlist(inf_fsts))),]
 
 
-# perhaps should normalise by data coverage here also?
+# normalise by data coverage
 
 pop_fixedsites<-rbind(sum(fixedsitesperid_wl1/767730079)*1000,
 sum(fixedsitesperid_wc1/767730079)*1000,
@@ -290,13 +255,6 @@ sum(fixedsitesperid_el1/767730079)*1000,
 sum(fixedsitesperid_em1/767730079)*1000)
 
 
-# A) number of population-wise fixed sites
-# WL, WC, EL, EM
-#           [,1]
-#[1,] 0.07708829
-#[2,] 0.72709409
-#[3,] 0.53358597
-#[4,] 0.48170967
 #-----------------------------------------------------------------------------------------------------------------------
 # B) number of population-wise segregating sites
 # z=2 for B
@@ -315,23 +273,11 @@ sum(segsitesperid_wc1/767730079)*1000,
 sum(segsitesperid_el1/767730079)*1000,
 sum(segsitesperid_em1/767730079)*1000)
 
-# B) number of population-wise segregating sites
-# WL, WC, EL, EM
-#    [,1]
-#[1,] 3.9409085
-#[2,] 0.6936383
-#[3,] 1.2544721
-#[4,] 1.4698317
-
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
 # 2.2) fixed sites per individual
-#now fixed sites are output in the same way as the het per id
-#-----------------------------------------------------------------------------------------------------------------------
-# 2.2) calc fixed sites per individual
 
-# this calculation is equivalent to processing het sites per id in het.emp.31aug.R
 format_fixedperid_fun<-function(x,y) {
 htest=list()
 for (i in 1:length(segsgenomewide[[x]])){
@@ -370,12 +316,7 @@ all_fixedperid<-rbind(
 (cbind(mean((colSums(fixedperid_el1)/767730079))*1000,sd((colSums(fixedperid_el1)/767730079))*1000)),
 (cbind(mean((colSums(fixedperid_em1)/767730079))*1000,sd((colSums(fixedperid_em1)/767730079))*1000)))
 
-# all_fixedperid
-#          [,1]       [,2]
-#[1,] 0.6275814 0.03072747
-#[2,] 0.7270941 0.00000000
-#[3,] 0.8805440 0.01569050
-#[4,] 0.8756855 0.01364289
+
 #-----------------------------------------------------------------------------------------------------------------------
 
 # now combine all into 1 vector with identifers for each
@@ -448,24 +389,10 @@ target
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
-
-# me
-#2. for the simulated data I was seeing the error 'subscript out of bounds'. 
-#Iteration 51 of rep 862 failed - is it ok to keep the other 50 iterations for rep 862? 
-#After checking the rest, it seems this is the only iteration which failed among the simulations.
-
-# MK
-#2. It seems like a problem with one replicate. The good thing about the parallelization 
-#is that if something fails, it only affects this iteration. 
-#So, if everything else looks normal, you should use them.
 #-----------------------------------------------------------------------------------------------------------------------
 
-# amend paths **
 
 # simulated data 
-
-# new batch of simulations. - output has path
-#/scratch/devel/hpawar/admix/abc/simul/test/11sep21/abc_sim*
 
 simufiles <- paste("/scratch/devel/hpawar/admix/abc/simul/test/11sep21/", list.files(path = "/scratch/devel/hpawar/admix/abc/simul/test/11sep21/", pattern="abc_sim"), sep = "")
 
@@ -483,8 +410,6 @@ simns_param[[i]]<-inputsets
 # $ :List of 51
 #  ..$ V13 :List of 6
 
-#head(simns[[1]][[1]])
-
 # simulations which failed 
 probl<-grep("Error", simns)
 
@@ -495,7 +420,7 @@ problsimns[[i]]<-grep("Error", simns[[probl[i]]])
 
 
 #Thu 30 Sep 2021 11:59:08 CEST
-#STREAMLINED VERSION OF FUNCTIONS -TEST WHEN CLUSTER IS BACK UP - works
+#STREAMLINED VERSION OF FUNCTIONS 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
@@ -832,22 +757,6 @@ s_ifix_sd<-comb_process_fun(out_het_fun1,het_format_problsimns_fun,3,2)
 s_ifix_sd[is.na(s_ifix_sd)] = 0
 
 #-----------------------------------------------------------------------------------------------------------------------
-# MK - b) Another question concerns the normalization of the "full_segsites" object part for the simulated values. 
-#As far as I see, you save the raw numbers of fixed sites, and then process interactively.
-#But why is the normalization (s_popseg/(700*40000))*1000). Shouldnt it be (s_popseg/(2500*40000))*1000). 
-#If you have 2500 simulations, that should be the factor, or am I missing something here? 
-#I just checked how this would influence the segsites:
-
-## ~Median of normalized value   
-#> c(949874,144163, 356160, 381739)/(2500*40000)*1000
-#[1] 9.49874 1.44163 3.56160 3.81739
-## empirical values
-#segsites_WL      segsites_WC      segsites_EL      segsites_EM
-#3.94090851       0.69363832       1.25447215       1.46983169
-#Thats not so far off anymore.
-
-# =>  I was mixing up number of simulation reps (the 700) with number of windows generated (the 2500). It should be 2500.
-# => change factor in division from 700 -> 2500
 #-----------------------------------------------------------------------------------------------------------------------
 
 #  popn-wise fixed sites
@@ -858,11 +767,7 @@ s_popfix_perkb<-((s_popfix/(2500*40000))*1000)
 s_popseg<-comb_process_fun(out_het_fun1,het_format_problsimns_fun,2,2)
 s_popseg_perkb<-((s_popseg/(2500*40000))*1000)
 
-# when cluster is working again - test if this works ** yes it does
-
 #-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-
 #-----------------------------------------------------------------------------------------------------------------------
 
 sumstat<-cbind(s_het_mu,s_het_sd,
@@ -874,21 +779,14 @@ s_pi_sd,
 s_tajima_mu,
 s_tajima_sd)
 
-#ncol(sumstat) # [1] 44
-#nrow(sumstat) # [1] 35543
 
 sumstat<-data.matrix(sumstat)
 # matching simulation vectors, each of them in the same order as summary stats from the real data (the "sumstat")
 
 #-----------------------------------------------------------------------------------------------------------------------
-
 #-----------------------------------------------------------------------------------------------------------------------
 
 # format input parameters used to generate the simulations generating these summary stats
-
-#head(simns_param)
-#length(simns_param[[1]])
-#[1] 51
 
 parameters_fun<-function(x) {
 pn=list()
@@ -906,25 +804,9 @@ pn_out[[i]]<-parameters_fun(i)
 
 #  remove those iterations of simulations which failed & did not output summary stats
 
-#torm<- c(3,  9, 15, 21, 27, 33, 39, 45, 51)
-#pn_out[[862]]<-pn_out[[862]][-c(torm)]
-
-# head(pn_out[[probl[[1]]]])
-#pn_out[[11]]<-pn_out[[11]][-c(problsimns[[1]])]
-#pn_out[[probl[[1]]]]<-pn_out[[probl[[1]]]][-c(problsimns[[1]])]
-
-
 for (i in 1:length(probl)){
 pn_out[[probl[[i]]]]<-pn_out[[probl[[i]]]][-c(problsimns[[i]])]
 }
-
-# length(pn_out[[11]])
-#[1] 42
-# length(pn_out[[483]])
-#[1] 35
-#length(pn_out)
-#[1] 700
-
 
 pn_format=list()
 for (i in 1:length(pn_out)){
@@ -945,7 +827,6 @@ ncol(param_df) #[1] 19
 param<-data.matrix(param_df)
 #parameter vector for each simulation vector, i.e. the input values you used to create each simulation (the "param"
 
-# check paranames - which have been fixed
 paraname=c("w_lowl_t0","w_cros_t0","e_lowl_t0","e_moun_t0","e_lowl_t1","e_lowl_t2","e_moun_t3","e_moun_t3.1","t4","e_anc_t4","t5","w_lowl_t5","admix_w_e_t6","admix_e_w_t6","t7","w_anc_t7","t8","gor_anc","id")
   
 colnames(param)<-paraname
@@ -954,10 +835,6 @@ head(param)
 # remove the id parameter - ie now parameter 19
 param<-param[,c(1:18)]
 
-#-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-# Q - whether to log transform any of the parameters? no b/c now all are on similar orders of magnitude
-    # b/c have also normalised seg sites
 #-----------------------------------------------------------------------------------------------------------------------
 
 # rm uninformative parameters
