@@ -25,7 +25,7 @@ chrom=$ID
 ## the program needs some parameters
 # -vcfz = gzipped VCF file to analyze
 # -indf = sample_pop_mapping_file.txt : cols: sample	pop	super_pop	gender
-# -ref-pops -target-pops = populations to use as in- and outgroup; could be GG, GB (among that also GBB, GBG)
+# -ref-pops -target-pops = populations to use as in- and outgroup
 # -ancbsg = ancestralized genome file in weird format
 # -archaic-vcf = "archaic" genome; I just feed in an ancestralized vcf file, but ignore later output based on that
 # -r callable regions in weird format
