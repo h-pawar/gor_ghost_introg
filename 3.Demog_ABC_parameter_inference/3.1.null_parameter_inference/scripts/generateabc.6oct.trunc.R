@@ -3,7 +3,6 @@
 #-----------------------------------------------------------------------------------------------------------------------
 # Wed  6 Oct 2021 09:42:10 CEST
 # rerunning abc analysis after recalculating "fixedsites" and "fixedsitesperid" in the empirical data
-# needed to  exclude differences to human (1/1 across all individuals) in the empirical data
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Wed 29 Sep 2021 09:36:54 CEST
