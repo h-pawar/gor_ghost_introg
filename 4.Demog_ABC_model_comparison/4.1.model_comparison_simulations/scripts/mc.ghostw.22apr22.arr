@@ -26,7 +26,7 @@ cd /dev/shm/mydata
 # model comparison simulations
 
 R CMD BATCH --vanilla --slave "--args ${ID}" /scratch/devel/hpawar/admix/abc/simul/scripts/modelcomp/mc.ghostw.22apr22.R  /scratch/devel/hpawar/admix/abc/simul/log/modelcomp/mc_ghostw_22apr22_${ID}.log
-find /dev/shm/mydata/ -type f -mtime +1 -name 'mc.ghoste.sim*' -execdir rm -- '{}' \;
+find /dev/shm/mydata/ -type f -mtime +1 -name 'mc.ghostw.sim*' -execdir rm -- '{}' \;
 
 exit
 #-----------------------------------------------------------------------------------------------------------------------
