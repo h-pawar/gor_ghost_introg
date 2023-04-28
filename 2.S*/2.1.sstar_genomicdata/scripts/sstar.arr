@@ -41,7 +41,7 @@ chrom=$ID
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
-# B) Calc S* for the subspecies comparisons on the autosomes
+# B) Calc S* for the subspecies comparisons on the autosomes - run for array 1-22
 
 # 1) WL outgroup, EL ingroup (GGG outg, GBG ing)
 #echo "GBG"
@@ -86,29 +86,6 @@ python /scratch/devel/mkuhlwilm/arch/freezing-archer-master/bin/windowed_calcula
 exit
 
 #-----------------------------------------------------------------------------------------------------------------------
-
-
-#-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-
-
-
-## first step: create callable bed file
-## retrieve callable fraction
-module load gcc/6.3.0 xz python/2.7.11 R/3.2.0 perl BCFTOOLS/1.6 tabix intel bedtools
-ID=$SLURM_ARRAY_TASK_ID
-chrom=$ID
-if [[ "$chrom" = 23 ]]; then chrom="X"; fi
-spec="gorilla"
-echo $chrom
-/apps/BCFTOOLS/1.9/bin/bcftools view -S /scratch/devel/mkuhlwilm/arch/"$spec".lst /scratch/devel/mkuhlwilm/gvcfs/greatapeN_"$chrom".vcf.gz -U | bedtools merge -i stdin >> /scratch/devel/mkuhlwilm/pseudoarc/gori_callable"$chrom".bed
-
-exit
-
-# second: merge and sort
-cat /scratch/devel/mkuhlwilm/pseudoarc/gori_callable*.bed | sort -k1,1 -k2,2n | bedtools merge -i stdin > /scratch/devel/mkuhlwilm/pseudoarc/gor_callable.bed
-# transform callable file to specific format
-python /home/devel/mkuhlwilm/programs/freezing-archer/freezing-archer-master/bin/myBedTools3.py merge -b /scratch/devel/mkuhlwilm/pseudoarc/gor_callable.bed -obbg /scratch/devel/mkuhlwilm/pseudoarc/gor_callable.bed.bbg
 
 
 
