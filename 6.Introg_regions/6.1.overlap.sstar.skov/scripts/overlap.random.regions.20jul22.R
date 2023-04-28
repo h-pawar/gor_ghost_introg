@@ -1,36 +1,10 @@
 #!/usr/bin/r
 
 # Wed 20 Jul 2022 16:30:28 CEST
-# this follows  /scratch/devel/hpawar/admix/sstar/scripts/simul_postabc/downstream/overlap.random.regions.18jul22.R
-# will need to discuss with MK which is best
+# overlapping bp for random genomic regions -> 100 reps (for each id)
 
-# here take the mean val of % bp overlap across ids per rep = population level mean per rep (as in calc p-val procedure in plot.gene.density.skov.17may22.R)
+# here take the mean val of % bp overlap across ids per rep = population level mean per rep 
 #-----------------------------------------------------------------------------------------------------------------------
-
-# Mon 18 Jul 2022 12:08:28 CEST
-# regenerate equivalent random regions, now have final S* dataset
-# following /scratch/devel/hpawar/admix/sstar/scripts/simul_postabc/downstream/overlap.random.regions.4may22.R 
-# but reading in the newly generated chr 9 (with correctly processed tumani)
-
-# Tue  3 May 2022 10:09:06 CEST
-# 1) obtain lengths of all windows considered per id (for S* 95,99,99.5% CIs & for skov strict all, >=40kb)
-  # obtain length dist of regions per individual -> then obtain random regions of same length
-  # ie to do this, need freq count of each category per id -eg id 1 has x windows of length 40kb, y windows of zkb etc
-
-# 2) from this length distribution - generate a set of random regions of exactly the same length distribution
-
-# follows from /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/simul_postabc/overlap.sstar.skov.perindiv.29apr22.R
-#-----------------------------------------------------------------------------------------------------------------------
-# MK
-#you should compare same things, i.e., for each individual, generate the same number of regions as you have in each object. 
-#Say, you have 6234 40kbp regions for S* and 5367 regions for Skov of length 40-XXkbp, then you randomly take 6234 regions 
-#and ask how much they overlap with random 5367 regions of length 40-XXkbp (exactly the same distribution). 
-#You can do the same thing 10 or 100 times to calculate SDs as well.
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-#Wed  4 May 2022 18:50:51 CEST
-# the 100 iterations of random intersects are taking a while to run interactively - send as a job 
 #-----------------------------------------------------------------------------------------------------------------------
 
 ## module load gcc/6.3.0 openssl/1.0.2q R/4.0.1
@@ -41,11 +15,8 @@ library(mgcv)
 library(GenomicRanges)
 library(tidyr)
 library(ggbio)
-#library(pheatmap)
-#library(ggplot2)
-#library(ggpubr)
 library(valr)
-#https://rdrr.io/cran/valr/man/bed_random.html # way to generate random regions in R requires valr package
+
 #-----------------------------------------------------------------------------------------------------------------------
 # glm generated for the S* CIs calc from simulated data (null simulations - gor demog, no ghost)
 load(file=paste("/scratch/devel/hpawar/admix/sstar/simul_postabc/stepwisesegs/final_8apr22/check_22apr22/glm",sep=""),verbose=T)
@@ -54,13 +25,12 @@ load(file=paste("/scratch/devel/hpawar/admix/sstar/simul_postabc/stepwisesegs/fi
 # function to read in sstar outlier data per scenario & per CI & split this into s* windows per target individual
 
 proc_proportion<-function(nput, ci) {
-  # for nput=1 # GBG
+
 
 # read in the empirical data
 chroms=1:23
 #there is no chrom 23.star file -> this is effectively 1:22 (reading in the autosomal data) 
-# will need to specify either GB or GG
-#cn1<-list(c("GB","GG"))
+
 
   # update to per subspecies comparisons
 # 1) WL outgroup, EL ingroup (GGG outg, GBG ing) = "GBG"
@@ -71,22 +41,15 @@ chroms=1:23
 
 cn1<-list(c("GBG","GBB","GGG","GGD"))
 
-
-# 1)  GBG, CI 3, 99.5%
-
-# for nput=1 # GBG
-
-#nput=1
-
 starout<-list()
 for (chrom in (chroms)) {
 starout[[chrom]]<-read.table(paste("/scratch/devel/hpawar/admix/sstar/out.subsp.comp/",cn1[[1]][[nput]],"_",chrom,".star",sep=""),sep="\t",header=T)[,c(9,4,10,52,12,13,7,1,2)]
 }
-# read in data for s* applied to chr 9 for target individuals plus newly processed tumani (whose chr 9 had sparse data issues)
+# read in data for s* applied to empirical data
 starout[[9]]<-read.table(paste("/scratch/devel/hpawar/admix/sstar/out.subsp.comp/",cn1[[1]][[nput]],"_newT_9.star",sep=""),sep="\t",header=T)[,c(9,4,10,52,12,13,7,1,2)] 
 
 staroutgbb<-do.call(rbind,starout)
-# ensure all tumani fragments are named consistently
+
 staroutgbb$ind_id[which(staroutgbb$ind_id=="Gbg-Tumani")]<-"Gorilla_beringei_graueri-Tumani"  
 
 staroutgbb[,8]<-paste(staroutgbb[,8],staroutgbb[,9])
@@ -107,11 +70,6 @@ for (ind in (1:length(indiv.gbb))) {
 ## you can see that each individual has a different number of significant regions:
 iva<-c()
 for (ind in 1:length(indiv.gbb)) { iva[ind]<-nrow(starperind.gbb[[ind]]) }
-
-#iva
-#[1] 900 842 898 876 883 800 864 818 876
-#> length(iva)
-#[1] 9
 
 converttoranges_function<-function(nput) {
 test<-starperind.gbb[[nput]][,c(1,2)]
@@ -159,24 +117,10 @@ sstar_GBG_99.5<-proc_proportion(1,3)
 sstar_GBB_99.5<-proc_proportion(2,3)
 
 #-----------------------------------------------------------------------------------------------------------------------
+
 # 2) read in skov strict outliers & using function below split per inidivdual & generate reduced granges objects
 # skov HMM bed file with the putative introgressed fragments ( ~2% with strict cutoff)
 sk<-read.table("/scratch/devel/mkuhlwilm/arch/skov/gor_fragments_strict.bed")
-#head(sk)
-#    V1       V2       V3                                V4
-#1 chr1  5199000  5219000 Gorilla_beringei_beringei-Bwiruka
-#2 chr1  5402000  5460000 Gorilla_beringei_beringei-Bwiruka
-
-#> nrow(sk)
-#[1] 15691
-
-# convert startpos & endpos from int to numeric values
-#sk[,c(2:3)]<-as.data.frame(lapply(sk[,c(2:3)], as.numeric)) # not necessary - b/c doing this step in the convert to granges function below
-
-#head(sk)
-#    V1       V2       V3                                V4
-#1 chr1  5199000  5219000 Gorilla_beringei_beringei-Bwiruka
-#2 chr1  5402000  5460000 Gorilla_beringei_beringei-Bwiruka
 
 # individuals for GBB & GBG
 sk_ids_gbb<-unique(sk$V4)[1:12]
@@ -209,24 +153,24 @@ reduce_sk_allids<-list()
 for (ind in (1:length(lids))) {
 reduce_sk_allids[[ind]]<-reduce(sk_allids[[ind]])
 }
-# perhaps already reduced? in the sk_allids step?
+
 return(reduce_sk_allids)
 }
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-sk_regions_gbb<-skov_proc_proportion(sk_ids_gbb) # works
+sk_regions_gbb<-skov_proc_proportion(sk_ids_gbb) 
 sk_regions_gbg<-skov_proc_proportion(sk_ids_gbg)
 
 # 2.1) filter strict skov regions by length - 40kb cutoff
 sk$V5<-sk$V3-sk$V2
 sk<-sk[sk$V5 >= 40000, ]
-sk_40kbregions_gbb<-skov_proc_proportion(sk_ids_gbb) # works
+sk_40kbregions_gbb<-skov_proc_proportion(sk_ids_gbb) 
 sk_40kbregions_gbg<-skov_proc_proportion(sk_ids_gbg)
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
-# there are X chr in the skov outliers but not in the s* -> not a fair comparison
+# filter skov to autosomes only
 
 rm_xchr_skov<-function(fG){
 aut_sk_regions_gbb<-list()
@@ -245,50 +189,6 @@ autosomes_40sk_gbb<-rm_xchr_skov(sk_40kbregions_gbb)
 autosomes_40sk_gbg<-rm_xchr_skov(sk_40kbregions_gbg)
 
 #-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-
-#> sstar_GBG_95[[1]]
-#GRanges object with 1759 ranges and 0 metadata columns:
-#         seqnames            ranges strand
-#            <Rle>         <IRanges>  <Rle>
-#     [1]     chr1   4350000-4390000      *
-#     [2]     chr1   5940000-5980000      *
-#     [3]     chr1   7650000-7690000      *
-#     [4]     chr1   8190000-8230000      *
-#     [5]     chr1   9240000-9280000      *
-#     ...      ...               ...    ...
-#  [1755]    chr22 38880000-38920000      *
-#  [1756]    chr22 42570000-42610000      *
-#  [1757]    chr22 44010000-44050000      *
-#  [1758]    chr22 44070000-44110000      *
-#  [1759]    chr22 44130000-44230000      *
-#  -------
-#  seqinfo: 22 sequences from an unspecified genome; no seqlengths
-
-# already reduced in the function above
-#reduce(sstar_GBG_95[[1]])
-#GRanges object with 1759 ranges and 0 metadata columns:
-
-
- #sstar_GBG_95[[1]]@ranges@width)/1000
-
- #( sstar_GBG_95[[1]]@ranges@width)/1000
- #  [1]  40.001  40.001  40.001  40.001  40.001  70.001  40.001  40.001  40.001
- # [10]  40.001  40.001  40.001  40.001  70.001  70.001  40.001  40.001  40.001
-
-# as a frequency distribution - 
-#> table(sstar_GBG_95[[1]]@ranges@width)
-
-# 40001  70001 100001 130001 160001 190001 220001 
-#  1313    329     77     31      4      4      1 
-
-
-# how many windows of x bp for this individual - eg 1313 windows of 40kb, 1 of 220kb
-#> table(sstar_GBG_95[[1]]@ranges@width-1)
-
-# 40000  70000 100000 130000 160000 190000 220000 
-#  1313    329     77     31      4      4      1 
-  # generate for each individual
 
 #-----------------------------------------------------------------------------------------------------------------------
 # lengths of hg19
@@ -299,18 +199,7 @@ hg19.lengths<-apply(hg19[,2],2,function(x) as.numeric(as.character(x)))
 # hg19 chr in the correct order
 hg19<-hg19[c(1:18,20,19,22,21),]
 colnames(hg19)<-c("chrom","size") 
-# or whether need to read in the genome itself?
-  # path to hg19 ref
 
-
-#-----------------------------------------------------------------------------------------------------------------------
-# path to human ref genome
-#ref="/home/devel/marcmont/scratch/snpCalling_hg19/chimp/assembly/BWA/hg19.fa"
-
-#bed_random(ref, length = 10, n = 10, seed = 10104)
-#Error in check_names(x, expect_names) : 
-#  expected 2 required names, missing: chrom, size
-# ref.fa not required here
 #-----------------------------------------------------------------------------------------------------------------------
 
 # gives lengths in bp
@@ -323,11 +212,6 @@ return(win_lengths)
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-
-# will need to go through each individual - & for each row of df, generate freq x windows of length var y
-#-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
 
 # generate random regions of a given length distribution (matching that of the fG input for each individual li)
 # run this function per individual
@@ -337,11 +221,9 @@ y<-as.data.frame(calc_winlengths(fG)[[li]])
 # convert from factor -> character -> numeric
 y$Var1<-as.numeric(as.character(y$Var1))
 
-# write as a function - go through each of lengths & n for this individual
+
 test_randomreg<-list()
 for (ind in (1:nrow(y))) {
-#test_randomreg[[ind]]<-bed_random(hg19, length = y[ind,1], n =  y[ind,2], seed = 10104) 
-# run without specifying the seed
 test_randomreg[[ind]]<-bed_random(hg19, length = y[ind,1], n =  y[ind,2]) 
 }
 
@@ -349,9 +231,6 @@ test_randomreg[[ind]]<-bed_random(hg19, length = y[ind,1], n =  y[ind,2])
 convert_tib_df<-function(lin) {
 x<- test_randomreg[[lin]]
 x<-as.data.frame(x)
-# convert to granges - then this will be what will be being intersected - later 
-#test_s<-GRanges(seqnames=x[,1],ranges=IRanges(start=as.numeric(x[,2]),end=as.numeric(x[,3]),names=x[,1]),strand=rep("*",length(x[,1])))
-#return(test_s)
 return(x)
 }
 
@@ -359,9 +238,8 @@ all_windowcategories<-list()
 for (ind in (1:nrow(y))) {
 all_windowcategories[[ind]]<-convert_tib_df(ind) }
 
-#do.call("rbind", list(dataframes to merge))
 x1<-do.call("rbind", all_windowcategories)
-# convert to granges - then this will be what will be being intersected
+
 test_s<-GRanges(seqnames=x1[,1],ranges=IRanges(start=as.numeric(x1[,2]),end=as.numeric(x1[,3]),names=x1[,1]),strand=rep("*",length(x1[,1])))
 
 return(test_s)
@@ -371,7 +249,7 @@ return(test_s)
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
-# write as a function as well - done
+
 generate_random<-function(fG) {
 random_reg_x<-list()
 for (ind in (1:length(fG))) {
@@ -386,47 +264,28 @@ return(random_reg_x)
 
 # calculate proportion of bp overlapping in intersect
 
-# Wed 23 Feb 2022 17:16:30 CET
-# MK
-#could it be that you are underestimating the overlap? 
-#In the end, many regions are observed in more than one individual, but you count the total number/width across, right? 
-#But then, you take the reduce() function for the overlap. 
-#Using individual-based estimates will help with that, obviously, but for the overall estimate, you may just add
-#fG<-reduce(fG);fB<-reduce(fB)
-#at the beginning of the calc_prof_fun function.
-
 calc_prop_fun<-function(fG,fB){
-fG<-reduce(fG);fB<-reduce(fB) # amendment - Wed 23 Feb 2022 17:28:27 CET
-pos.overlaps<-reduce(subsetByOverlaps(fG,fB)) ## this may be more useful output? (gives ranges which overlap ie the exact positions) (yes - these are the unique overlapping regions)
-## shoudl calc proportion overlapping both ways (ie of A how much overlaps with B + vice versa)
-## & calc propotion of only unique overlapping regions
+fG<-reduce(fG);fB<-reduce(fB) 
+pos.overlaps<-reduce(subsetByOverlaps(fG,fB))
 prop.bp.x<-sum(reduce(subsetByOverlaps(fG,fB))@ranges@width)/sum(fG@ranges@width) # proportion of overlapping bp
 prop.frag.x<-length(reduce(subsetByOverlaps(fG,fB)))/length(fG) # proportion of overlapping fragments
 prop.bp.y<-sum(reduce(subsetByOverlaps(fG,fB))@ranges@width)/sum(fB@ranges@width) # proportion of overlapping bp
 prop.frag.y<-length(reduce(subsetByOverlaps(fG,fB)))/length(fB) # proportion of overlapping fragments
-## shoudl combine the following into 1 output? b/c also need to output for vice versa B in A
+
 out.x<-(cbind(prop.bp.x, prop.frag.x))
 out.y<-(cbind(prop.bp.y, prop.frag.y))
-#return(pos.overlaps)
+
 return(rbind(out.x,out.y))
 }
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 # process output of overlaps : regions overlapping, length dist, proportion (overlapping bp & fragments) - order of query matters
 process_tooverlap_fun<-function(sstar_subs,skov_subs){
-# pairwise comparison of outlier windows : diff number of ranges obtained depending on which is query & which labelled as source
-# ie query s* outliers by skov bed files & vice versa
-#ranges_1<-reduce(subsetByOverlaps(sstar_subs,skov_subs)) 
 ranges_2<-reduce(subsetByOverlaps(skov_subs,sstar_subs))
 # length distribution of overlapping regions
-#lengths_1<-summary(reduce(subsetByOverlaps(sstar_subs,skov_subs))@ranges@width)/1000
 lengths_2<-summary(reduce(subsetByOverlaps(skov_subs,sstar_subs))@ranges@width)/1000
 # proportion overlapping
-#col1 = proportion of overlapping bp for unique overlapping regions
-#col2 = proportion of overlapping fragments for unique overlapping regions
-#prop_1<-calc_prop_fun(sstar_subs,skov_subs)
 prop_2<-calc_prop_fun(skov_subs,sstar_subs)
-#return(list(ranges_1,ranges_2,lengths_1,lengths_2,prop_1,prop_2))
 return(list(ranges_2,lengths_2,prop_2))
 }
 
@@ -441,11 +300,6 @@ for (ind in (1:length(sstar_subs))) {
 out_gbb_95[[ind]]<-process_tooverlap_fun(sstar_subs[[ind]],skov_subs[[ind]])
 }
 
-# for the proportion of overlapping bp 
-# extract first rows of 3rd df
- #out_gbb_95[[1]][[3]][1,]
- # prop.bp.x prop.frag.x 
- # 0.6345073   0.4444444 
 
 prop_overlap_gbb_95<-list()
 for (ind in (1:length(sstar_subs))) {
@@ -455,7 +309,7 @@ prop_overlap_gbb_95[[ind]]<-out_gbb_95[[ind]][[3]][1,]
 prop_df<-do.call(rbind, prop_overlap_gbb_95)
 
 # length dists in kb
- #(out_gbb_95[[1]][[1]]@ranges@width)/1000
+
 length_overlap_gbb_95<-list()
 for (ind in (1:length(sstar_subs))) {
 length_overlap_gbb_95[[ind]]<-out_gbb_95[[ind]][[2]]
@@ -465,17 +319,12 @@ length_df<- do.call(rbind,length_overlap_gbb_95)
 
 return(list(out_gbb_95,prop_df,length_df))
 }
-#-----------------------------------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------------------------- 
+
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 # 2) generate 100 sets of random regions - ie iteratively extract random regions of equal length dist per id as the empirical stats
 
-# MK: #You can do the same thing 10 or 100 times to calculate SDs as well.
-
-
 #function to generate random regions & calc intersect for one iteration, outputs proportion of bp & proportion of fragments overlapping
-  # could directly write out only the proportion of bp overlapping here? instead of also including the fragments?
 random_intersect_onerep<-function(fG,fB){
 rG<-generate_random(fG)
 rB<-generate_random(fB)
@@ -484,19 +333,7 @@ return(out_1iter)
 }
 
 # function to 1) generate 100 iterations of the intersect of random regions for each id of the same length distribution as the statistics
-# 2) calculate overall mean & sd of overlapping bp (for the population across the 100 reps), & the mean,sd per individual across the 100 reps
-process_randomintersect<-function(fG,fB){
-overlap_100iter<-list()
-for (i in (1:100)) {
-overlap_100iter[[i]]<-random_intersect_onerep(fG,fB)}
-test_all<-do.call(rbind, overlap_100iter)   
-o1<-cbind(mean(test_all[,1]),sd(test_all[,1]))
-return(o1)
-}
-#-----------------------------------------------------------------------------------------------------------------------
-
-# amending 2) here - Wed 20 Jul 2022 16:30:28 CEST
-# take mean per rep (all ids in 1 rep), rather than mean of all reps 
+# 2) calculate overall mean & sd of overlapping bp per rep 
 
 process_randomintersect<-function(fG,fB){
 overlap_100iter<-list()
@@ -507,86 +344,15 @@ overlap_100iter[[i]]<-random_intersect_onerep(fG,fB)[,1]
 # take the mean across ids for this random rep
 mean_ov_100iter[[i]]<-mean(overlap_100iter[[i]])}
 test_all<-do.call(rbind, mean_ov_100iter)   
-#o1<-cbind(mean(test_all[,1]),sd(test_all[,1]))
-#return(o1)
 return(list(overlap_100iter,test_all))
 }
 
 # [[1]]: overlapping bp per individual of population - sep sublist per rep
 # [[2]]: each row = mean across ids for given rep
 
-# this is a better output **
-#> process_randomintersect(sstar_GBB_95,autosomes_sk_gbb) # for (i in 1:100)
-#[[1]]
-#[[1]][[1]]
-# [1] 0.1514926 0.1027757 0.1491418 0.1505172 0.1567343 0.1633737 0.1328289
-# [8] 0.1130891 0.1452553 0.1001433 0.1249025 0.1811674
-
-#[[1]][[2]]
-# [1] 0.15081444 0.13466066 0.12754349 0.13788608 0.16192725 0.12579733
-# [7] 0.12606051 0.12466689 0.12899787 0.08662591 0.13472451 0.13029613
-
-#[[1]][[3]]
-# [1] 0.1719293 0.1345588 0.1579071 0.1624598 0.1634852 0.1229306 0.1125283
-# [8] 0.1232083 0.1456992 0.1350506 0.1330930 0.1131430
-
-#[[1]][[4]]
-# [1] 0.1284715 0.1298831 0.1351419 0.1027940 0.1058973 0.1617390 0.1143733
-# [8] 0.1613838 0.1663733 0.1227483 0.1075175 0.1786942
-
-#[[1]][[5]]
-# [1] 0.1526791 0.1687458 0.1724382 0.1534313 0.1349112 0.1742504 0.1207360
-# [8] 0.1145809 0.1365473 0.1223688 0.1402457 0.1341100
-
-
-#[[2]]
-#          [,1]
-#[1,] 0.1392852
-#[2,] 0.1308334
-#[3,] 0.1396661
-#[4,] 0.1345848
-#[5,] 0.1437537
-
-#-----------------------------------------------------------------------------------------------------------------------
-# gives expected output, but is slow
-#> process_randomintersect(sstar_GBG_95,autosomes_sk_gbg)
-#[[1]]
-#          [,1]       [,2]
-#[1,] 0.1039014 0.01709986
-
-#[[2]]
-#            [,1]       [,2]
-# [1,] 0.11047362 0.01635893
-# [2,] 0.10224753 0.01451359
-# [3,] 0.10992877 0.01823264
-# [4,] 0.10810224 0.01626923
-# [5,] 0.10183971 0.01692575
-# [6,] 0.09428083 0.01511345
-# [7,] 0.11173132 0.01792665
-# [8,] 0.09181626 0.01338523
-# [9,] 0.10469262 0.01247750
-
-
-# generate for the rest of the comparisons **
-  # runs slowly -> send as a job
-
 scen_emp_GBG<-list(sstar_GBG_95,sstar_GBG_99,sstar_GBG_99.5)
 scen_emp_GBB<-list(sstar_GBB_95,sstar_GBB_99,sstar_GBB_99.5)
 
-
-#overall_calc_overlap<-function(scen,skov_version){
-#overall_overlap<-list()
-#for (ind in (1:length(scen))) {
-#overall_overlap[[ind]]<-process_randomintersect(scen[[ind]],skov_version)}
-#return(overall_overlap)
-#}
-
-
-#overall_calc_overlap(scen_emp_GBB,autosomes_sk_gbb)
-#overall_calc_overlap(scen_emp_GBB,autosomes_40sk_gbb)
-
-#overall_calc_overlap(scen_emp_GBG,autosomes_sk_gbg)
-#overall_calc_overlap(scen_emp_GBG,autosomes_40sk_gbg)
 
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -596,23 +362,6 @@ print("empirical data stats")
 
 scen_GBB<-list(sstar_GBB_95,sstar_GBB_99,sstar_GBB_99.5)
 scen_GBG<-list(sstar_GBG_95,sstar_GBG_99,sstar_GBG_99.5)
-
-
-# amending here to only output the mean
-#recalc_empirical_mean<-function(scen,skov_version){
-#overlap40kb_gbb<-list()
-#pt_estimate<-list()
-#for (ind in (1:length(scen))) {
-#overlap40kb_gbb[[ind]]<-intersect_function(scen[[ind]],skov_version)[[2]]
-#pt_estimate[[ind]]<-cbind(mean(overlap40kb_gbb[[ind]][,1]),sd(overlap40kb_gbb[[ind]][,1]))}
-#return(pt_estimate)
-#}
-
-#recalc_empirical_mean(scen_GBB,autosomes_sk_gbb)
-#recalc_empirical_mean(scen_GBG,autosomes_sk_gbg)
-
-#recalc_empirical_mean(scen_GBB,autosomes_40sk_gbb)
-#recalc_empirical_mean(scen_GBG,autosomes_40sk_gbg)
 
 
 recalc_empirical_mean<-function(scen,skov_version){
