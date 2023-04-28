@@ -22,11 +22,6 @@ ID=$SLURM_ARRAY_TASK_ID
 module load gcc/6.3.0 R/3.4.2 xz/5.2.2  BCFTOOLS/1.6
 if [[ "$ID" = 23 ]]; then ID="X"; fi
 
-#Rscript --vanilla /scratch/devel/hpawar/admix/abc/simul/scripts/stats.emp.data.clean1.R $ID 
-#-----------------------------------------------------------------------------------------------------------------------
-# Tue 17 Aug 2021 18:04:42 CEST
-# need to recalculate summary stats for empirical data b/c order of individuals in the vcf != order of individuals simulated   
-#Rscript --vanilla /scratch/devel/hpawar/admix/abc/simul/scripts/stats.emp.data.clean2.R $ID
 #-----------------------------------------------------------------------------------------------------------------------
 # Tue 24 Aug 2021 10:52:20 CEST
 # need to recalculate summary stats for empirical data b/c order of individuals in the vcf != order of individuals simulated
