@@ -12,13 +12,10 @@
 
 ID=$SLURM_ARRAY_TASK_ID
 
-# MK - If half the data takes 40min, you can launch jobs with 51 iterations on 4 CPUs, which should take ~8.5h, so you can set 9h for the time. 
-# array = 1-2000
+
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Generate ms simulations for abc + output relevant summary statistics : heterozygosity, number of segregating sites, pairwise Fst
-# using script /scratch/devel/hpawar/admix/abc/simul/scripts/test.abc.model.R 
-
+# Generate ms simulations for abc + output relevant summary statistics
 #-----------------------------------------------------------------------------------------------------------------------
 
 # whether need to load python here? only for sstar or also for ms?
