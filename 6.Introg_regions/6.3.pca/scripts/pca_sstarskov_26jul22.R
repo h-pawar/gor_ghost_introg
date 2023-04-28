@@ -1,8 +1,5 @@
 # Tue 26 Jul 2022 11:08:42 CEST
 # regions in overlap of (99% s* - strict skov) generate pcas 
-# run interactively to check if works - in principle shoudl be ok (b/c input is still granges object)
-
-# amending from /scratch/devel/hpawar/admix/sstar/scripts/simul_postabc/downstream/pca_skov_3jun22.R
 
 #-----------------------------------------------------------------------------------------------------------------------
 #module load gcc/6.3.0 openssl/1.0.2q  R/4.0.1  BCFTOOLS/1.14
@@ -13,11 +10,7 @@ options(scipen=100)
 library(adegenet)
 library(mgcv)
 library(GenomicRanges)
-#BiocManager::install(c("GenomicRanges", "plyranges", "HelloRangesData"))
-#library(plyranges) # may not be necessary here
-#library(GenomicFeatures) # if need to read in the gtf
 library(tidyr)
-#library(ggbio)
 library(ggplot2)
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -27,7 +20,6 @@ library(ggplot2)
 
 # glm generated for the S* CIs calc from simulated data (null simulations - gor demog, no ghost)
 load(file=paste("/scratch/devel/hpawar/admix/sstar/simul_postabc/stepwisesegs/final_8apr22/check_22apr22/glm",sep=""),verbose=T)
-	# issue this needs to be in module load gcc/6.3.0 openssl/1.0.2q  R/4.0.1  : installed adegenet in newer r version
 
 #-----------------------------------------------------------------------------------------------------------------------
 # function to read in sstar outlier data per scenario & per CI & split this into s* windows per target individual
@@ -37,8 +29,6 @@ proc_proportion<-function(nput, ci) {
 
 # read in the empirical data
 chroms=1:23 #there is no chrom 23.star file -> this is effectively 1:22 (reading in the autosomal data) 
-# will need to specify either GB or GG
-#cn1<-list(c("GB","GG"))
 
   # update to per subspecies comparisons
 # 1) WL outgroup, EL ingroup (GGG outg, GBG ing) = "GBG"
@@ -49,22 +39,14 @@ chroms=1:23 #there is no chrom 23.star file -> this is effectively 1:22 (reading
 
 cn1<-list(c("GBG","GBB","GGG","GGD"))
 
-
-# 1)  GBG, CI 3, 99.5%
-
-# for nput=1 # GBG
-
-#nput=1
-
 starout<-list()
 for (chrom in (chroms)) {
 starout[[chrom]]<-read.table(paste("/scratch/devel/hpawar/admix/sstar/out.subsp.comp/",cn1[[1]][[nput]],"_",chrom,".star",sep=""),sep="\t",header=T)[,c(9,4,10,52,12,13,7,1,2)]
 }
-# read in data for s* applied to chr 9 for target individuals plus newly processed tumani (whose chr 9 had sparse data issues)
+# read in data for s* applied to empirical data
 starout[[9]]<-read.table(paste("/scratch/devel/hpawar/admix/sstar/out.subsp.comp/",cn1[[1]][[nput]],"_newT_9.star",sep=""),sep="\t",header=T)[,c(9,4,10,52,12,13,7,1,2)] 
 
 staroutgbb<-do.call(rbind,starout)
-# ensure all tumani fragments are named consistently
 staroutgbb$ind_id[which(staroutgbb$ind_id=="Gbg-Tumani")]<-"Gorilla_beringei_graueri-Tumani"  
 
 #get values per individual - for each comparison
@@ -90,11 +72,6 @@ for (ind in (1:length(indiv.gbb))) {
 ## you can see that each individual has a different number of significant regions:
 iva<-c()
 for (ind in 1:length(indiv.gbb)) { iva[ind]<-nrow(starperind.gbb[[ind]]) }
-
-#iva
-#[1] 900 842 898 876 883 800 864 818 876
-#> length(iva)
-#[1] 9
 
 converttoranges_function<-function(nput) {
 test<-starperind.gbb[[nput]][,c(1,2)]
@@ -134,21 +111,6 @@ sstar_GBB_99<-proc_proportion(2,2)
 
 # skov HMM bed file with the putative introgressed fragments ( ~2% with strict cutoff)
 sk<-read.table("/scratch/devel/mkuhlwilm/arch/skov/gor_fragments_strict.bed")
-#head(sk)
-#    V1       V2       V3                                V4
-#1 chr1  5199000  5219000 Gorilla_beringei_beringei-Bwiruka
-#2 chr1  5402000  5460000 Gorilla_beringei_beringei-Bwiruka
-
-#> nrow(sk)
-#[1] 15691
-
-# convert startpos & endpos from int to numeric values
-#sk[,c(2:3)]<-as.data.frame(lapply(sk[,c(2:3)], as.numeric)) # not necessary - b/c doing this step in the convert to granges function below
-
-#head(sk)
-#    V1       V2       V3                                V4
-#1 chr1  5199000  5219000 Gorilla_beringei_beringei-Bwiruka
-#2 chr1  5402000  5460000 Gorilla_beringei_beringei-Bwiruka
 
 # individuals for GBB & GBG
 sk_ids_gbb<-unique(sk$V4)[1:12]
@@ -190,16 +152,16 @@ return(reduce_sk_allids)
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-sk_regions_gbb<-skov_proc_proportion(sk_ids_gbb) # works
+sk_regions_gbb<-skov_proc_proportion(sk_ids_gbb)
 sk_regions_gbg<-skov_proc_proportion(sk_ids_gbg)
 
 # 2.1) filter strict skov regions by length - 40kb cutoff
 sk$V5<-sk$V3-sk$V2
 sk<-sk[sk$V5 >= 40000, ]
-sk_40kbregions_gbb<-skov_proc_proportion(sk_ids_gbb) # works
+sk_40kbregions_gbb<-skov_proc_proportion(sk_ids_gbb) 
 sk_40kbregions_gbg<-skov_proc_proportion(sk_ids_gbg)
 #-----------------------------------------------------------------------------------------------------------------------
-# there are X chr in the skov outliers but not in the s* -> not a fair comparison
+# filter skov autosomes only
 
 rm_xchr_skov<-function(fG){
 aut_sk_regions_gbb<-list()
@@ -224,15 +186,12 @@ autosomes_40sk_gbg<-rm_xchr_skov(sk_40kbregions_gbg)
 
 # Wed 20 Jul 2022 17:35:51 CEST
 calc_prop_fun<-function(fG,fB){
-fG<-reduce(fG);fB<-reduce(fB) # amendment - Wed 23 Feb 2022 17:28:27 CET
-pos.overlaps<-reduce(subsetByOverlaps(fG,fB)) ## this may be more useful output? (gives ranges which overlap ie the exact positions) (yes - these are the unique overlapping regions)
-## shoudl calc proportion overlapping both ways (ie of A how much overlaps with B + vice versa)
-## & calc propotion of only unique overlapping regions
+fG<-reduce(fG);fB<-reduce(fB)
+pos.overlaps<-reduce(subsetByOverlaps(fG,fB)) 
 prop.bp.x<-sum(reduce(subsetByOverlaps(fG,fB))@ranges@width)/sum(fG@ranges@width) # proportion of overlapping bp
 prop.frag.x<-length(reduce(subsetByOverlaps(fG,fB)))/length(fG) # proportion of overlapping fragments
 prop.bp.y<-sum(reduce(subsetByOverlaps(fG,fB))@ranges@width)/sum(fB@ranges@width) # proportion of overlapping bp
 prop.frag.y<-length(reduce(subsetByOverlaps(fG,fB)))/length(fB) # proportion of overlapping fragments
-## shoudl combine the following into 1 output? b/c also need to output for vice versa B in A
 out.x<-(cbind(prop.bp.x, prop.frag.x))
 out.y<-(cbind(prop.bp.y, prop.frag.y))
 #return(pos.overlaps)
@@ -242,31 +201,17 @@ return(rbind(out.x,out.y))
 #-----------------------------------------------------------------------------------------------------------------------
 # process output of overlaps : regions overlapping, length dist, proportion (overlapping bp & fragments) - order of query matters
 process_tooverlap_fun<-function(sstar_subs,skov_subs){
-# pairwise comparison of outlier windows : diff number of ranges obtained depending on which is query & which labelled as source
-# ie query s* outliers by skov bed files & vice versa
-#ranges_1<-reduce(subsetByOverlaps(sstar_subs,skov_subs)) 
 ranges_2<-reduce(subsetByOverlaps(skov_subs,sstar_subs))
-# length distribution of overlapping regions
-#lengths_1<-summary(reduce(subsetByOverlaps(sstar_subs,skov_subs))@ranges@width)/1000
 lengths_2<-summary(reduce(subsetByOverlaps(skov_subs,sstar_subs))@ranges@width)/1000
-# proportion overlapping
-#col1 = proportion of overlapping bp for unique overlapping regions
-#col2 = proportion of overlapping fragments for unique overlapping regions
-#prop_1<-calc_prop_fun(sstar_subs,skov_subs)
 prop_2<-calc_prop_fun(skov_subs,sstar_subs)
-#return(list(ranges_1,ranges_2,lengths_1,lengths_2,prop_1,prop_2))
-# only output ranges here? - RUN THROUGH INTERACTIVELY TMRW *******
 return(list(ranges_2,lengths_2,prop_2))
 }
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
-# SEE IF THIS WORKS & GIVES EQUIVALENT RESULTS TO PREVIOUS FN ******** yes, but only outputs the ranges (not the proportions or the lengths)
-# or only output ranges_2
+
 intersect_function<-function(sstar_subs,skov_subs) {
-# 1) compare GBB - 95% CI for S*
-#sstar_subs #sk_regions_gb
 out_gbb_95<-list()
 for (ind in (1:length(sstar_subs))) {
 out_gbb_95[[ind]]<-process_tooverlap_fun(sstar_subs[[ind]],skov_subs[[ind]])[[1]]
@@ -281,10 +226,6 @@ ov_gbg40_99<-intersect_function(sstar_GBG_99,autosomes_40sk_gbg)
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
-
-# CHANGE PATHS *
-#mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid
-#/scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid/,SPE,"/"
 
 # granges of introg regions for 1 individual -> bed file 
   # contains introg regions across all autosomes for the specified individual
@@ -356,7 +297,6 @@ aut_oneid[which(aut_oneid=="0|0")]<-0
 aut_oneid[which(aut_oneid=="0|1")]<-1
 aut_oneid[which(aut_oneid=="1|1")]<-2
 
-#return(aut_oneid)
 gts<-aut_oneid
 
 # convert gts to matrix
@@ -373,11 +313,7 @@ pca_tes <- dudi.pca(t(pcsub),nf=30,scannf=F)
 (k <- 100 * pca_tes$eig/sum(pca_tes$eig))
 
 # take the PCs 1-2, with the population identifiers
-#pc1pc2<-as.data.frame(cbind(pca_tes$li[,c(1:2)],identifiers[,2]))
-# may be best to output all PCs & all ks Thu 19 May 2022 09:31:18 CEST
 pc1pc2<-as.data.frame(cbind(pca_tes$li,identifiers[,2]))
-#colnames(pc1pc2)<-c("pc1","pc2","pop")
-
 x<-as.numeric(format(round(k[[1]], 2), nsmall = 2) )
 xaxis=paste("PC1 (",x,"%)",sep="")
 y<-as.numeric(format(round(k[[2]], 2), nsmall = 2) )
@@ -390,13 +326,10 @@ y4axis=paste("PC4 (",y4,"%)",sep="")
 
 a=ind
 
-# write this out
 pca_out<-paste("/scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid/",SPE,"/",spe,".",a,".pca",sep="")
 tes<-list(pc1pc2,k,xaxis,yaxis,x3axis,y4axis)
 
 save(tes,file=pca_out)
-
-#return(list(pc1pc2,xaxis,yaxis))
 
 return(list(pc1pc2,k,xaxis,yaxis,x3axis,y4axis))
 
@@ -411,13 +344,9 @@ pca_allids<-function(scen,SPE,spe) {
 out<-list()
 for (ind in (1:length(scen))) {
 out[[ind]]<- test_gts_topca(scen,ind,SPE,spe)}
-#pca_out<-paste("/scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid/",SPE,"/",spe,".allids.pca",sep="")
-#save(out,file=pca_out)
-#return(out)
 }
 
-# apply pca_all_ids function to all scenarios - GBB, GBG, with & without 40kb cutoff
-# Fri 20 May 2022 08:52:45 CEST - has run for the empirical but not random reps - comment out these 4 lines
+
 pca_allids(sk_regions_gbb,"GBB","gbb")
 pca_allids(sk_regions_gbg,"GBG","gbg")
 
