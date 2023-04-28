@@ -37,10 +37,6 @@ require(data.table)
 options(stringsAsFactors=F)
 files <- paste("/scratch/devel/hpawar/admix/abc/emp.data/window.info/", list.files(path = "/scratch/devel/hpawar/admix/abc/emp.data/window.info/", pattern="gorilla_"), sep = "")
 
-#load(file=files[[1]],verbose=T)
-#x<-aweight3
-
-
 genomewide=list()
 for (i in 1:length(files)){
 load(file=files[[i]],verbose=T)
@@ -207,31 +203,17 @@ match_hold<-data.frame(do.call(rbind.data.frame, out_test))
 
 colnames(match_hold)[4]<-'identifier'
 
-#head(match_hold)
-#      chr startpos proportion identifier
-#25982   1   840000   0.841050          4
-#25988   1  1080000   0.796950          7
-
-
 # ie subset lists of x by match_hold$identifier
 ns <-match_hold[,4]
 
-# loop over numbers in vector - https://stackoverflow.com/questions/14592383/using-non-sequential-vector-as-input-for-a-loop
 stats_inform=list()
 for (n in ns) {
 stats_inform[[n]]<-x[[n]]
 }
 
- # => remove null elements of the list
-#mylist[lengths(mylist) != 0] # https://stackoverflow.com/questions/33004238/r-removing-null-elements-from-a-list
-
 stats_inform1<-stats_inform[lengths(stats_inform) != 0]
-# these are the ones (sufficiently informative windows + summary statistics) to retain - ie write this out to file **
-  # & need to generalise so can apply a large function with these steps to the rest of the chromosomes
+# these are the ones (sufficiently informative windows + summary statistics) to retain - ie write this out to file 
 
-
-#mkdir -p /scratch/devel/hpawar/admix/abc/emp.data/window.info/subset/
-#chrom=as.numeric(stats_inform1[[1]][[1]][[1]])
 save(stats_inform1,file=paste("/scratch/devel/hpawar/admix/abc/emp.data/test/het_chr",chrom,"_informativewindows",sep=""))
 }
 
@@ -239,10 +221,6 @@ save(stats_inform1,file=paste("/scratch/devel/hpawar/admix/abc/emp.data/test/het
 #-----------------------------------------------------------------------------------------------------------------------
 
 all_function(1)
- # has generated output check this is correct
- # load(file="/scratch/devel/hpawar/admix/abc/emp.data/test/het_chr1_informativewindows",verbose=T)
-#head( stats_inform1) # against:
-# seems fine
 
 for (x in 2:22){
 all_function(x)
