@@ -12,10 +12,10 @@
 
 # array = 2-700 # send first for a test job
 
-# ghostw ABC parameter inference simulations
+# generate ghostw ABC parameter inference simulations
 
 ID=$SLURM_ARRAY_TASK_ID
-module load gcc/6.3.0 R/3.4.2 tabix # for v3
+module load gcc/6.3.0 R/3.4.2 tabix
 
 mkdir /dev/shm/mydata
 cd /dev/shm/mydata
