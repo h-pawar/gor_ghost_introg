@@ -10,12 +10,9 @@
 
 # combine the recalculated tajimas d stats with those for the original stats 
 
-# think yesterday i was combining the wrong reps in generateabc.28mar22.R **
-# => this supercedes /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/generateabc.28mar22.R
-
 #-----------------------------------------------------------------------------------------------------------------------
 
-# 0) check 2 lists for equality - ie that the input sets are in the same order (could check this before generating all)
+# 0) check 2 lists for equality - ie that the input sets are in the same order 
 
 # order of parameters used to generate new taj d reps
 #load(file=paste("/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/null.simns_param"),verbose=T)
@@ -33,7 +30,6 @@
 #simns_param[[i]]<-inputsets
 #}
 
-#just for this task is the function identical()
 
 #identical(taj_inputsets, simns_param)
 #[1] TRUE
@@ -71,11 +67,9 @@ load("/scratch/devel/hpawar/admix/abc/results/test/11sep21simns/segrecalc/target
 tajfiles <- paste("/scratch/devel/hpawar/admix/abc/simul/test/11sep21/tajima_21mar22/", list.files(path = "/scratch/devel/hpawar/admix/abc/simul/test/11sep21/tajima_21mar22/", pattern="taj_sim"), sep = "")
 taj=list()
 taj_param=list()
-for (i in 1:length(tajfiles)){ 
-#load(file=tajfiles[[i]],verbose=T)   
+for (i in 1:length(tajfiles)){  
 load(file=paste("/scratch/devel/hpawar/admix/abc/simul/test/11sep21/tajima_21mar22/taj_sim",i,"",sep=""),verbose=T)
 taj[[i]]<-tajresults
-#taj_param[[i]]<-inputsets
 taj_param[[i]]<-rep_param
 }
 
@@ -84,17 +78,6 @@ taj_param[[i]]<-rep_param
  for (i in 1:length(probl)){
  problsimns[[i]]<-grep("Error", taj[[probl[i]]])
  }
-#Error in taj[[probl[i]]] : 
-#  attempt to select less than one element in get1index
-  # now have all generated *
-
-# need to check the input sets match ** (ie that taj_param are in same order as simns_param)
-
-#Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
-#In addition: Warning message:
-#In readChar(con, 5L, useBytes = TRUE) :
-#  cannot open file '/scratch/devel/hpawar/admix/abc/simul/test/11sep21/tajima_21mar22/': it is a directory
-	# have already removed the files - ahhh , regenerate both ways
 
 #-----------------------------------------------------------------------------------------------------------------------
 # check which reps were the probl reps (which were removed from previous stats)
@@ -106,19 +89,17 @@ simns=list()
 simns_param=list()
 for (i in 1:length(simufiles)){
 load(file=simufiles[[i]],verbose=T)
-#load(file=paste("/scratch/devel/hpawar/admix/abc/simul/test/11sep21/abc_sim",i,"",sep=""),verbose=T) # Tue 29 Mar 2022 10:32:24 CES - may have been mixing the order
 simns[[i]]<-simuresults
 simns_param[[i]]<-inputsets
 }
 
 #-----------------------------------------------------------------------------------------------------------------------
-# check again the 2 lists for equality
-# to check the results are in the right order (combining exactly the same reps)
+# check again the 2 lists for equality # to check the results are in the right order (combining exactly the same reps)
+# this shoudl give 'true' then can continue 
 
 identical(taj_param, simns_param)
 #[1] TRUE
 
-# this shoudl give 'true' then can continue - if not will have to script for equality between these 2 
 #-----------------------------------------------------------------------------------------------------------------------
 
 
@@ -136,57 +117,8 @@ problsimns[[i]]<-grep("Error", simns[[probl[i]]])
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-# try the below ** works - superceded by the below b/c change in structure of the taj objects - Wed 30 Mar 2022 10:39:37 CEST
-
-#format_probltaj_fun<-function(x) {
-#y<-probl[[x]]
-#hold_problout=list()
-#for(i in 1:length(taj[[y]]) ){
-#  if( (i %in% problsimns[[x]]) ){ next }
-# hold_problout[[i]]<-(taj[[x]][[i]]) 
-#}
-#t<-hold_problout[lengths(hold_problout) != 0]
-#return(t)
-#}
-
-
-#out_subs=list()
-#for (i in 1:length(probl)){
-#out_subs[[i]]<-format_probltaj_fun(i)
-#}
-
-# & then for reps [1]  14  74 108 191 316 320 363 364 483 518 527 533 558 606
-# replace eg taj[[14]] with out_subs[[1]]
-
-#taj_1<-taj
-#for (i in 1:length(probl)){
-#taj_1[[probl[[i]]]]<-out_subs[[i]]
-#}
-
-# for one simn rep (1 of 700) - go over all iter, cbind the means & sds
-#process_tajima_fun<-function(x) {
-#test=list()
-#for (i in 1:length(taj_1[[x]])){
-#test[[i]]<-cbind(taj_1[[x]][[i]][[1]][,1],
-#taj_1[[x]][[i]][[2]][,1],
-#taj_1[[x]][[i]][[3]][,1],
-#taj_1[[x]][[i]][[1]][,2],
-#taj_1[[x]][[i]][[2]][,2],
-#taj_1[[x]][[i]][[3]][,2])
-#}
-#test_df<-data.frame(matrix(unlist(test), nrow=length(test), byrow=TRUE),stringsAsFactors=FALSE)
-#}
-
-#out_10=list()
-#for (i in 1:length(taj_1)){
-#out_10[[i]]<-process_tajima_fun(i)
-#}
-
-
-#tajima_df<-do.call(rbind, out_10)
-
 #-----------------------------------------------------------------------------------------------------------------------
-# process tajimas d - adding an extra list -> changes format of the below (ie will need to output for both ways of calculating tajimas d (list 1 removing nas, list 2 setting nas to zeroes))
+# process tajimas d 
 format_probltaj_fun<-function(x) {
 y<-probl[[x]]
 hold_problout=list()
@@ -202,9 +134,6 @@ out_subs=list()
 for (i in 1:length(probl)){
 out_subs[[i]]<-format_probltaj_fun(i)
 }
-
-# & then for reps [1]  14  74 108 191 316 320 363 364 483 518 527 533 558 606
-# replace eg taj[[14]] with out_subs[[1]]
 
 taj_1<-taj
 for (i in 1:length(probl)){
@@ -245,26 +174,12 @@ out_10_1[[i]]<-process_tajima_fun(i,2)
 }
 tajima_df_1<-do.call(rbind, out_10_1)
 
-#> head(tajima_df)
-#          X1          X2          X3        X4        X5        X6
-#1  0.4167580  0.46562685  0.49485547 0.7433172 0.9023540 0.9068425
-#2  0.8676222  0.44991533 -0.41158341 1.1029782 1.0094695 0.8164846
-#3 -0.4971888  0.12391908  0.83855571 0.5750598 0.7891707 0.9674788
-#4  0.3756968 -0.27485992 -0.05767152 0.7322998 0.9029399 0.9623945
-#5 -0.1791976 -0.04008158 -0.40286272 0.8722693 0.8660530 0.8039115
-#6  0.1149197  0.02538842  0.85328368 0.7075222 0.9722703 1.1181789
-#> nrow(tajima_df)
-#[1] 35543
 
 # WL mu, EL mu, EM mu, then the same for the sds 
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
-#str(sumstat1)
-# num [1:35543, 1:40] 3.11 2.79 2.08 3.32 1.14 ...
-# - attr(*, "dimnames")=List of 2
-#  ..$ : NULL
-#  ..$ : chr [1:40] "X1" "X2" "X3" "X4" ..
+
 original<-sumstat1[,c(1:34)]
 sumstat2<-cbind(original, tajima_df)
 sumstat2<-data.matrix(sumstat2)
@@ -277,10 +192,10 @@ prior_ranges<-data.matrix(priordf)
 
 myabc_5apr22<-abc(target=target1,param=param,tol=0.005,sumstat=sumstat2,method="neuralnet",numnet=100,transf="logit",logit.bounds=prior_ranges)
 
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
-123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
-Warning message:
-All parameters are "logit" transformed. 
+#123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
+#123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100
+#Warning message:
+#All parameters are "logit" transformed. 
 
 myabc_5apr22[[17]][[1]]<-colnames(param)
 myabc_5apr22[[17]][[2]]<-names(target1)
