@@ -21,10 +21,9 @@ ID=$SLURM_ARRAY_TASK_ID
 
 module load gcc/6.3.0 R/3.4.2 xz/5.2.2  BCFTOOLS/1.6
 
-#Rscript --vanilla /scratch/devel/hpawar/admix/abc/simul/scripts/het.emp.26aug.R $ID
-
 #------------------------------------------------------------------------------------------------------------------------
 #Tue 31 Aug 2021 12:36:40 CEST - change way of calculating seg sites
+# first run
 #Rscript --vanilla /scratch/devel/hpawar/admix/abc/simul/scripts/het.emp.31aug.R $ID
 #------------------------------------------------------------------------------------------------------------------------
 
