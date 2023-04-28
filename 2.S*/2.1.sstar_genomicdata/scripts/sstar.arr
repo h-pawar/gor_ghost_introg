@@ -11,53 +11,24 @@
 # @ array = 23
 
 ## this is running Sstar on the genome
-#module load PYTHON/2.7.3 R/3.2.0 tabix 
 
 # load venv - where have installed necessary python modules for sstar - bitarry, numpy, pandas, numexpr and tables
+
 module load gcc/6.3.0 openssl/1.0.2q PYTHON/2.7.17 
 source venv2/bin/activate
 
 ID=$SLURM_ARRAY_TASK_ID
-## the actual S-star script
-#cd /scratch/devel/mkuhlwilm/sstarga/
+
 chrom=$ID
-#if [[ "$chrom" = 23 ]]; then chrom="X"; fi
+
+#-----------------------------------------------------------------------------------------------------------------------
 ## the program needs some parameters
 # -vcfz = gzipped VCF file to analyze
-	# MK: use the files with the prefix "3_". These are filtered and importantly correcting some bugs which prevented running Sstar on the data.
 # -indf = sample_pop_mapping_file.txt : cols: sample	pop	super_pop	gender
 # -ref-pops -target-pops = populations to use as in- and outgroup; could be GG, GB (among that also GBB, GBG)
 # -ancbsg = ancestralized genome file in weird format
 # -archaic-vcf = "archaic" genome; I just feed in an ancestralized vcf file, but ignore later output based on that
 # -r callable regions in weird format
-
-#-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-
-## A) this is running Sstar on the genome - E clade (EM + EL) vs W clade (WL + WC)
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-# for chr X (23) - run this section
-
-#echo "GB"
-#python /scratch/devel/mkuhlwilm/arch/freezing-archer-master/bin/windowed_calculations.py -s-star -vcfz /scratch/devel/mkuhlwilm/arch/subsets/3_gorilla_X.vcf.gz -indf /scratch/devel/mkuhlwilm/arch/gorilla.slst -winlen 40000 -winstep 30000 -winchrom $chrom -ref-pops GG -target-pops GB -o /scratch/devel/hpawar/admix/sstar/out/GB_"$chrom".star -ancbsg /scratch/devel/mkuhlwilm/pseudoarc/ga_ancestral.bsg -archaic-vcf /scratch/devel/mkuhlwilm/pseudoarc/ga_Xb.vcf.gz -r /scratch/devel/mkuhlwilm/pseudoarc/gor_callable.bed.bbg
-
-#echo "GG"
-#python /scratch/devel/mkuhlwilm/arch/freezing-archer-master/bin/windowed_calculations.py -s-star -vcfz /scratch/devel/mkuhlwilm/arch/subsets/3_gorilla_X.vcf.gz -indf /scratch/devel/mkuhlwilm/arch/gorilla.slst -winlen 40000 -winstep 30000 -winchrom $chrom -ref-pops GB -target-pops GG -o /scratch/devel/hpawar/admix/sstar/out/GG_"$chrom".star -ancbsg /scratch/devel/mkuhlwilm/pseudoarc/ga_ancestral.bsg -archaic-vcf /scratch/devel/mkuhlwilm/pseudoarc/ga_Xb.vcf.gz -r /scratch/devel/mkuhlwilm/pseudoarc/gor_callable.bed.bbg
-
-#exit
-
-#-----------------------------------------------------------------------------------------------------------------------
-# for autosomes 1-22 - run this section 
-
-#echo "GB"
-#python /scratch/devel/mkuhlwilm/arch/freezing-archer-master/bin/windowed_calculations.py -s-star -vcfz /scratch/devel/mkuhlwilm/arch/subsets/3_gorilla_"$chrom".vcf.gz -indf /scratch/devel/mkuhlwilm/arch/gorilla.slst -winlen 40000 -winstep 30000 -winchrom $chrom -ref-pops GG -target-pops GB -o /scratch/devel/hpawar/admix/sstar/out/GB_"$chrom".star -ancbsg /scratch/devel/mkuhlwilm/pseudoarc/ga_ancestral.bsg -archaic-vcf /scratch/devel/mkuhlwilm/pseudoarc/ga_"$chrom"b.vcf.gz -r /scratch/devel/mkuhlwilm/pseudoarc/gor_callable.bed.bbg
-
-#echo "GG"
-#python /scratch/devel/mkuhlwilm/arch/freezing-archer-master/bin/windowed_calculations.py -s-star -vcfz /scratch/devel/mkuhlwilm/arch/subsets/3_gorilla_"$chrom".vcf.gz -indf /scratch/devel/mkuhlwilm/arch/gorilla.slst -winlen 40000 -winstep 30000 -winchrom $chrom -ref-pops GB -target-pops GG -o /scratch/devel/hpawar/admix/sstar/out/GG_"$chrom".star -ancbsg /scratch/devel/mkuhlwilm/pseudoarc/ga_ancestral.bsg -archaic-vcf /scratch/devel/mkuhlwilm/pseudoarc/ga_"$chrom"b.vcf.gz -r /scratch/devel/mkuhlwilm/pseudoarc/gor_callable.bed.bbg
-
-#exit
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
@@ -119,11 +90,6 @@ exit
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
-
-scp /home/mkuhlwilm/Documents/Programs/archaicapes/sstar/sstar.arr 172.16.10.20:/home/devel/mkuhlwilm/programs/sstar2.arr
-ssh 172.16.10.20
-mnsubmit /home/devel/mkuhlwilm/programs/sstar2.arr
-
 
 
 
