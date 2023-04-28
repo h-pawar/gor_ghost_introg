@@ -10,7 +10,7 @@
 # @ requeue = 1
 # @ array = 1-700
 
-# infer  ghoste model parameter inference 
+# generate ghoste model ABC parameter inference simulations
 
 ID=$SLURM_ARRAY_TASK_ID
 module load gcc/6.3.0 R/3.4.2 tabix # for v3
