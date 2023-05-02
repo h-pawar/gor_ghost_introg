@@ -11,13 +11,8 @@
 # @ array = 1
 
 #ID=$SLURM_ARRAY_TASK_ID
-# array=1
 
 module load gcc/6.3.0 openssl/1.0.2q R/4.0.1
-
-
-#mkdir -p /scratch/devel/hpawar/admix/sstar/scripts/simul_postabc/downstream/revisions_8feb23
-# mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/revisions_8feb23/log
 
 
 # Fri 10 Feb 2023 16:52:20 CET
