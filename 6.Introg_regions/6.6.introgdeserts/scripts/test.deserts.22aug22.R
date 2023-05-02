@@ -1,5 +1,5 @@
 # Mon 22 Aug 2022 18:47:30 BST
-# recalculate deserts  - excluding short windows at end of chr & excluding centromeres
+# calculate deserts  - excluding short windows at end of chr & excluding centromeres
 #-----------------------------------------------------------------------------------------------------------------------
 
 ## module load gcc/6.3.0 openssl/1.0.2q R/4.0.1 
