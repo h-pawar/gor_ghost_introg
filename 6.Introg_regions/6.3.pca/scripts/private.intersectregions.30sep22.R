@@ -9,11 +9,7 @@ options(stringsAsFactors=F)
 library(tidyverse)
 options(scipen=100)
 library(adegenet)
-#library(mgcv)
 library(GenomicRanges)
-#BiocManager::install(c("GenomicRanges", "plyranges", "HelloRangesData"))
-#library(plyranges) # may not be necessary here
-#library(GenomicFeatures) # if need to read in the gtf
 library(tidyr)
 
 library(phangorn)
@@ -25,17 +21,6 @@ load(file="/scratch/devel/hpawar/admix/overlap.s*.skov/overlap_objects/ov_gbb_99
 load(file="/scratch/devel/hpawar/admix/overlap.s*.skov/overlap_objects/ov_gbg_99",verbose=T)
 
 #-----------------------------------------------------------------------------------------------------------------------
-
-#scen=ov_gbb_99
-#lids=12
-
-#/scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid/
-#[hpawar@login1 ~]$ mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/privateregionsperid/GBB
-#[hpawar@login1 ~]$ mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/privateregionsperid/GBG
-
-#[hpawar@login1 ~]$ mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/privateregionsperid/random/GBB
-#[hpawar@login1 ~]$ mkdir -p /scratch/devel/hpawar/admix/overlap.s*.skov/privateregionsperid/random/GBG
-
 
 
 extract_private_regions<-function(scen,lids,SPE,spe){
@@ -67,13 +52,10 @@ private_rows<- which(freq1$freq==1)
 sbs<-testcount[private_rows,]
 
 
-#return(sbs)
-
 # 3) for each individual, extract their private regions
 private_regions_perid<-function(id){
 # subset the sbs object to the chr, start, end pos, width, strand & counts of 0 or 1 for a given ind (where 0 = ind does not carry fragment, 1 = ind has this fragment as a private fragment)  
 id_1<-sbs[,id]
-# convert granges to df 
 id_1<-as.data.frame(id_1)
 id_1_s<-id_1[,c(1:3,6)]
 colnames(id_1_s)<-c("seqnames","start","end","id")
