@@ -11,10 +11,6 @@
 # @ array = 1-5
 
 
-# Tue  8 Feb 2022 11:54:18 CET
-# calc sfs of the autosomes
-# first step generate GT matrix from vcf
-
 #-----------------------------------------------------------------------------------------------------------------------
 # 2) generate sfs
 #- need unfolded sfs w ancestral allele call
@@ -32,11 +28,8 @@ ID=$SLURM_ARRAY_TASK_ID
 
 # tag for VCF file (vcf file with format "vcffile".vcf)
 vcffile="4_"$ID"_Egor.biallelic.filt";      
-# Get GT field with bcftools
 bcftools query -f '[%GT\t]\n' ${vcffile}.vcf.gz > ${vcffile}.GT
 # Replace 0/0 by 0 # Replace 0/1 by 1 # Replace 1/1 by 2 # Replace ./. by -1 # Replace . by -1
-#sed -i "s/0\/0/0/g;s/0\/1/1/g;s/1\/0/1/g;s/1\/1/2/g;s/\.\/./-1/g;s/\./-1/g" ${vcffile}.GT - not working b/c | instead of /
-
 sed -i "s/0|0/0/g;s/0|1/1/g;s/1|0/1/g;s/1|1/2/g;s/\.|./-1/g;s/\./-1/g" ${vcffile}.GT
 
 #-----------------------------------------------------------------------------------------------------------------------
