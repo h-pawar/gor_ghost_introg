@@ -42,8 +42,6 @@ colnames(identifiers)<-c("ids","pop")
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Wed 18 May 2022 12:34:45 CEST - works but memory heavy - need to send as jobs or at least mnsh -c 4
-
 # generate bed file of introg regions for 1 individual
 # intersect bed with all autosomal vcfs - extract chr, pos, gts
 # convert gts to matrix of 0,1,2
@@ -53,7 +51,6 @@ colnames(identifiers)<-c("ids","pop")
 test_gts_topca<-function(ind,SPE,spe) {
 
 # extract biallelic GTs for introg regions across all autosomes for the first individual
-# loop over all chr - to obtain testsnps df for all chr
 autosome_sk_oneid<-list()
 for (chr in (1:22)) {
 autosome_sk_oneid[[chr]]<-intersect_introgbed_regions(ind,SPE,spe,chr)
