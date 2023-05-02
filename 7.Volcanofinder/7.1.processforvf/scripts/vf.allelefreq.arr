@@ -16,8 +16,7 @@
 ID=$SLURM_ARRAY_TASK_ID
 
 #Fri  4 Feb 2022 11:26:00 CET
-# 1) generate the allele freq file (required input for volcanofinder)
-    # - needs derived allele counts on biallelic sites 
+# 1) generate the allele freq file (required input for volcanofinder) - needs derived allele counts on biallelic sites 
 
 module load BCFTOOLS/1.12
 # filtered & annotated with ancestral allele (human ref vs macaque - now gor vs human ref)
@@ -29,7 +28,6 @@ vcf=$vcfdir$ID".vcf.gz"
 # 0) subset to only easterns
 subsvcfdir="/scratch/devel/hpawar/admix/volcanofinder/input/2feb22"
 subsvcf=$subsvcfdir"/4_"$ID"_Egor.vcf.gz"
-
 
 bcftools view -s  Gorilla_beringei_beringei-Bwiruka,Gorilla_beringei_beringei-Imfura,Gorilla_beringei_beringei-Kaboko,Gorilla_beringei_beringei-Kahungye,Gorilla_beringei_beringei-Katungi,Gorilla_beringei_beringei-Maisha,Gorilla_beringei_beringei-Nyamunwa,Gorilla_beringei_beringei-Semehe,Gorilla_beringei_beringei-Tuck,Gorilla_beringei_beringei-Turimaso,Gorilla_beringei_beringei-Umurimo,Gorilla_beringei_beringei-Zirikana,Gorilla_beringei_graueri-9732_Mkubwa,Gorilla_beringei_graueri-A929_Kaisi,Gorilla_beringei_graueri-A967_Victoria,Gorilla_beringei_graueri-Dunia,Gorilla_beringei_graueri-Itebero,Gorilla_beringei_graueri-Mukokya,Gorilla_beringei_graueri-Ntabwoba,Gorilla_beringei_graueri-Pinga,Gorilla_beringei_graueri-Tumani $vcf -Oz -o $subsvcf
 
@@ -45,22 +43,18 @@ vcftools --gzvcf ${subsvcf}  --min-alleles 2 --max-alleles 2 --remove-indels --r
 
 pref="4_"$ID"_Egor.biallelic"
 
-bgzip -c "$pref".recode.vcf > "$pref".vcf.gz # compress
+bgzip -c "$pref".recode.vcf > "$pref".vcf.gz
 tabix -p vcf "$pref".vcf.gz # create index file
 rm "$pref".recode.vcf # remove intermediate files
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-# 1.1) filter to remove loci with multiple ancestral alleles 
-    # b/c don't know the ancestral state of these loci (insertions/deletions)
+# 1.1) filter to remove loci with multiple ancestral alleles - b/c don't know the ancestral state of these loci (insertions/deletions)
 
 module unload gcc/latest zlib/1.2.8 VCFTOOLS/0.1.15 TABIX/0.2.6
 module load BCFTOOLS/1.12
 
-
-# extract rows where AA=x (rather than AA=GAT eg)
 bcftools view -H 4_"$ID"_Egor.biallelic.vcf.gz |  cut -f1-2,8 | awk -F ";" '{print $1}' | awk ' length($3) == 4 ' |  awk -v OFS='\t' '{print $1,$2}' > 4_"$ID"_Egor.biallelic.keep.regions.txt
-
 
 # keep sites where there is one ancestral allele given
 bcftools view -R 4_"$ID"_Egor.biallelic.keep.regions.txt 4_"$ID"_Egor.biallelic.vcf.gz -Oz -o 4_"$ID"_Egor.biallelic.filt.vcf.gz
