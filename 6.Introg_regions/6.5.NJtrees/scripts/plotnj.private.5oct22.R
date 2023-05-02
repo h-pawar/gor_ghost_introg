@@ -4,10 +4,8 @@
 library(phangorn) 
 library(ape) 
 library('pegas')
-#id=1
 
 #-----------------------------------------------------------------------------------------------------------------------
-# pass which scenario from the cd line
 args = commandArgs(trailingOnly=TRUE)
 id=args[1] 
 SPE=args[2]
