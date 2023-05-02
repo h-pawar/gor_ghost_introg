@@ -1,6 +1,5 @@
 # Tue 26 Jul 2022 12:23:10 CEST
 # generate haplotype networks for intersect regions of length >=100kb
-  # first identify how many such regions exist
 
 #-----------------------------------------------------------------------------------------------------------------------
 ## module load gcc/6.3.0 openssl/1.0.2q  R/4.0.1  BCFTOOLS/1.12
