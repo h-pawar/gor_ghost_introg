@@ -11,10 +11,8 @@
 # @ array = 1
 
 #ID=$SLURM_ARRAY_TASK_ID
-# array=1
 
 module load gcc/6.3.0 openssl/1.0.2q R/4.0.1
-
 
 #Mon 20 Mar 2023 14:24:43 CET
 # perform 100 iterations of random intersects - generating random regions of sufficient callable sites
