@@ -2,63 +2,6 @@
 # recalculate deserts  - excluding short windows at end of chr & excluding centromeres
 #-----------------------------------------------------------------------------------------------------------------------
 
-#Q - whether to exclude the short windows at the end of the chr?
-#Q - centromere localisation? whether to include this in the counts? (or in the denominators for chr size?)
-
-# MK
-#1. Yes, you may exclude windows <1Mbp; yes, centromeres should be
-#excluded, do you have coordinates?
-
-# MK re centromeres
-#I used the ggbio package to plot the genome. 
-#It includes info on the human genome, but since I can't access the cluster anymore, I can't check the details. 
-#Not even sure the package still works fine.
-#-----------------------------------------------------------------------------------------------------------------------
-
-#library("ggbio")
-#data(hg19IdeogramCyto, package = "biovizBase")
-#hg19 <- keepSeqlevels(hg19IdeogramCyto, paste0("chr", c(1:22, "X")))
-#cols<-getOption("biovizBase")$cytobandColor
-#cols[which(names(cols) %in% c("acen"))]<-"black" ## "acen" is the centromeres
-
-#ggplot(hg19) +  layout_karyogram( cytoband = T,aes(linetype="blank",xlab=""))
-
-#Anyhow, this file should contain the same cytobands including centromeres ("acen"):
-#http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz
-
-#This is also a rather strict definition of centromeres, I guess...
-
-#(base) harvi@Harvinders-MacBook-Pro ~ % head ~/Downloads/cytoBand.txt
-#chr1	0	2300000	p36.33	gneg
-#chr1	2300000	5400000	p36.32	gpos25
-#chr1	5400000	7200000	p36.31	gneg
-#chr1	7200000	9200000	p36.23	gpos25
-
-#(base) harvi@Harvinders-MacBook-Pro ~ % grep 'acen'  ~/Downloads/cytoBand.txt
-#chr1	121500000	125000000	p11.1	acen
-#chr1	125000000	128900000	q11	acen
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-# https://www.rdocumentation.org/packages/GWASTools/versions/1.18.0/topics/centromeres
-#BiocManager::install("GWASTools")
-#Centromere base positions from the GRCh36/hg18, GRCh37/hg19 and GRCh38/hg38 genome builds.
-#Usage
-#data(centromeres.hg18)
-#data(centromeres.hg19)
-
-# gives
-#A data frame with the following columns.
-#chromchromosome (1-22, X, Y) left.basestarting base position of centromere right.baseending base position of centromere
-
-#> (centromeres.hg19)
-#   chrom left.base right.base
-#1      1 121535434  124535434
-#2      2  92326171   95326171
-#-----------------------------------------------------------------------------------------------------------------------
-
-
-
 ## module load gcc/6.3.0 openssl/1.0.2q R/4.0.1 
 require(data.table)
 library(GenomicRanges)
@@ -69,40 +12,17 @@ library('GenomeInfoDb')
 #-----------------------------------------------------------------------------------------------------------------------
 # location of centromeres
 data(hg19IdeogramCyto, package = "biovizBase")
-# shoudl remove chr x - only considering the autosomes
+
 hg19 <- keepSeqlevels(hg19IdeogramCyto, paste0("chr", c(1:22)),pruning.mode="coarse")
 centromeres <- hg19[hg19$gieStain=='acen']
 
-#centromeres
-#GRanges object with 44 ranges and 2 metadata columns:
-#       seqnames              ranges strand |     name gieStain
-#          <Rle>           <IRanges>  <Rle> | <factor> <factor>
-#   [1]     chr1 121500000-125000000      * |   p11.1      acen
-#   [2]     chr1 125000000-128900000      * |   q11        acen
-#   [3]    chr10   38000000-40200000      * |   p11.1      acen
-#   [4]    chr10   40200000-42300000      * |   q11.1      acen
-#   [5]    chr11   51600000-53700000      * |   p11.11     acen
-#   ...      ...                 ...    ... .      ...      ...
-#  [40]     chr7   59900000-61700000      * |    q11.1     acen
-#  [41]     chr8   43100000-45600000      * |    p11.1     acen
-#  [42]     chr8   45600000-48100000      * |    q11.1     acen
-#  [43]     chr9   47300000-49000000      * |    p11.1     acen
-#  [44]     chr9   49000000-50700000      * |    q11       acen
-#  -------
-#  seqinfo: 22 sequences from an unspecified genome; no seqlengths
-
 #-----------------------------------------------------------------------------------------------------------------------
 
-
 # non-overlapping windows across chromosomes
-
 mygenome <- readDNAStringSet("/home/devel/marcmont/scratch/snpCalling_hg19/chimp/assembly/BWA/hg19.fa")
 chrSizes <- width(mygenome)
 names(chrSizes) <- names(mygenome)
-#print(chrSizes)
 
-# or directly read in the lengths of hg19 chr:
-	# from overlap.random.regions.20jul22.R
 #-----------------------------------------------------------------------------------------------------------------------
 # lengths of hg19
 #hg19<-fread('/home/devel/marcmont/scratch/Harvi/geneflow/test/test.reconst.ids/ora_1_1/proportion/hg19.autosomes.chrom.sizes.txt')
