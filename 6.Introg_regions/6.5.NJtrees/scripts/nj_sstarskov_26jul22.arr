@@ -16,8 +16,6 @@ module load gcc/6.3.0 openssl/1.0.2q  R/4.0.1  BCFTOOLS/1.14
 
 # Wed 29 Jun 2022 10:00:31 CEST
 # generate nj trees for overlap regions (s*-skov)
-#Rscript --vanilla  /scratch/devel/hpawar/admix/sstar/scripts/simul_postabc/downstream/nj_sstarskov_26jul22.R
-
 
 m=$(sed -n ${ID}p  /scratch/devel/hpawar/admix/sstar/scripts/simul_postabc/downstream/nj.comp.list | awk -F ":" '{print $1}')
 SPE=$(sed -n ${ID}p  /scratch/devel/hpawar/admix/sstar/scripts/simul_postabc/downstream/nj.comp.list | awk -F ":" '{print $2}')
