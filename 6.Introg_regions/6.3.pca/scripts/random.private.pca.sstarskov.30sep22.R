@@ -39,7 +39,6 @@ return(reducedConsensus)
 
 testcount<-non_overlapping_region_counts()
 counts<-(as.data.frame((mcols(testcount))[,1:lids]))
-# freq of introg regions across the pop
 freq<-rowSums(counts)
 freq1<-as.data.frame(freq)
 
@@ -48,7 +47,6 @@ freq1<-as.data.frame(freq)
 private_rows<- which(freq1$freq==1)
 sbs<-testcount[private_rows,]
 
-# 3) for each individual, extract their private regions
 private_regions_perid<-function(id){
 id_1<-sbs[,id]
 id_1<-as.data.frame(id_1)
@@ -91,33 +89,22 @@ private_gbg_gr[[ind]]<-df_granges_fun(sbs_gbg,ind)
 
 
 #-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-# samples & their populations
 
 samples.in.vcf<-system(paste("bcftools query -l /scratch/devel/mkuhlwilm/arch/subsets/3_gorilla_22.vcf.gz",sep=""),intern=T) # -l, --list-samples: list sample names and exit
 
 identifiers<-cbind(samples.in.vcf, c(rep("GBB",12), rep("GBG",9), rep("GGD",1),rep("GGG",27)))
 colnames(identifiers)<-c("ids","pop")
 #-----------------------------------------------------------------------------------------------------------------------
-
-
-# A) generate random regions of equal length distribution as the empirical data for each individual
-# (B) intersect w vcfs -> matrix of gts -> pca
-
 #-----------------------------------------------------------------------------------------------------------------------
-# lengths of hg19
+
 hg19<-fread('/home/devel/marcmont/scratch/Harvi/geneflow/test/test.reconst.ids/ora_1_1/proportion/hg19.autosomes.chrom.sizes.txt')
 
 hg19.lengths<-apply(hg19[,2],2,function(x) as.numeric(as.character(x)))
-
-# hg19 chr in the correct order
 hg19<-hg19[c(1:18,20,19,22,21),]
 colnames(hg19)<-c("chrom","size") 
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-# gives lengths in bp
 calc_winlengths<-function(fG){
 win_lengths<-list()
 for (ind in (1:length(fG))) {
@@ -128,7 +115,7 @@ return(win_lengths)
 #-----------------------------------------------------------------------------------------------------------------------
 
 # generate random regions of a given length distribution (matching that of the fG input for each individual li)
-# run this function per individual
+
 test_proc_randomregions<-function(fG, li) {
 y<-as.data.frame(calc_winlengths(fG)[[li]])
 y$Var1<-as.numeric(as.character(y$Var1))
@@ -137,7 +124,6 @@ test_randomreg<-list()
 for (ind in (1:nrow(y))) {
 test_randomreg[[ind]]<-bed_random(hg19, length = y[ind,1], n =  y[ind,2]) 
 }
-
 
 convert_tib_df<-function(lin) {
 x<- test_randomreg[[lin]]
@@ -168,7 +154,7 @@ return(random_reg_x)
 #-----------------------------------------------------------------------------------------------------------------------
 
 sk_ran_gbb<-generate_random(private_gbb_gr) # generates for 1 rep (random regions for each id)
-sk_ran_gbg<-generate_random(private_gbg_gr) # generates for 1 rep (random regions for each id)
+sk_ran_gbg<-generate_random(private_gbg_gr)
 
 
 ran_regions_out<-list(sk_ran_gbb,sk_ran_gbg)
@@ -180,8 +166,6 @@ save(ran_regions_out,file="/scratch/devel/hpawar/admix/overlap.s*.skov/privatere
 #-----------------------------------------------------------------------------------------------------------------------
 
 
-# granges of introg regions for 1 individual -> bed file 
-  # contains introg regions across all autosomes for the specified individual
 random_granges_tobed<-function(scen,ind,SPE,spe){
 
 df <- data.frame(seqnames=seqnames(scen[[ind]]),
@@ -201,16 +185,13 @@ write.table(df,tmp,sep="\t",row.names=F,col.names=F,quote=F) # should write thi
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-#bed file -> intersect with vcf, extract biallelic snps only -> output chr, pos, gts
-
 random_intersect_introgbed_regions<-function(scen,ind,SPE,spe,chrom){
 a=ind
 tmp<-paste(" /scratch/devel/hpawar/admix/overlap.s*.skov/privateregionsperid/random/",SPE,"/",spe,".",a,".random.tmp.bed",sep="")
 
 chrom=chrom
-# filter by biallelic snps only, query by the putative introg regions for id 1 & output chr, pos & gts
 testsnps<-system(paste("bcftools view -m2 -M2 -v snps -R ",tmp," /scratch/devel/mkuhlwilm/arch/subsets/3_gorilla_",chrom,".vcf.gz | bcftools query -f '%CHROM %POS [%GT ]\n' ",sep=""),intern=T) 
-testsnps<-do.call(rbind,strsplit(testsnps,split=" "))  ## ie list merged vertically into df
+testsnps<-do.call(rbind,strsplit(testsnps,split=" "))
 
 return(testsnps)
 }
@@ -218,18 +199,10 @@ return(testsnps)
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
-# generate bed file of introg regions for 1 individual
-# intersect bed with all autosomal vcfs - extract chr, pos, gts
-# convert gts to matrix of 0,1,2
-# calculate pca
-# output PC 1,2 & % variance explained by each
-
 random_test_gts_topca<-function(scen,ind,SPE,spe) {
 
 random_granges_tobed(scen,ind,SPE,spe)
 
-# extract biallelic GTs for introg regions across all autosomes for the first individual
-# loop over all chr - to obtain testsnps df for all chr
 autosome_sk_oneid<-list()
 for (chr in (1:22)) {  
 autosome_sk_oneid[[chr]]<-random_intersect_introgbed_regions(scen,ind,SPE,spe,chr)
@@ -243,20 +216,13 @@ aut_oneid[which(aut_oneid=="1|1")]<-2
   
 gts<-aut_oneid
 
-# convert gts to matrix
 pcsub<-matrix(as.numeric(gts[,c(3:ncol(gts))]),nrow=nrow(gts)) 
 
-# calculate pca
 pca_tes <- dudi.pca(t(pcsub),nf=30,scannf=F)
-
-#pca_tes$eig # eigenvalues 
-#(pca_tes$li) li #the row coordinates i.e. the principal components
 
 # % of variance explained by each component:
 (k <- 100 * pca_tes$eig/sum(pca_tes$eig))
 
-
-# take the PCs 1-2, with the population identifiers
 pc1pc2<-as.data.frame(cbind(pca_tes$li,identifiers[,2]))
   
 x<-as.numeric(format(round(k[[1]], 2), nsmall = 2) )
