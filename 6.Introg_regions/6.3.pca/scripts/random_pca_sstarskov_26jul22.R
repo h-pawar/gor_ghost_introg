@@ -24,8 +24,6 @@ load(file="/scratch/devel/hpawar/admix/overlap.s*.skov/overlap_objects/ov_gbg40_
 
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
-# samples & their populations
-
 samples.in.vcf<-system(paste("bcftools query -l /scratch/devel/mkuhlwilm/arch/subsets/3_gorilla_22.vcf.gz",sep=""),intern=T) # -l, --list-samples: list sample names and exit
 identifiers<-cbind(samples.in.vcf, c(rep("GBB",12), rep("GBG",9), rep("GGD",1),rep("GGG",27)))
 colnames(identifiers)<-c("ids","pop")
@@ -36,18 +34,15 @@ colnames(identifiers)<-c("ids","pop")
 # (B) intersect w vcfs -> matrix of gts -> pca
 
 #-----------------------------------------------------------------------------------------------------------------------
-# lengths of hg19
 hg19<-fread('/home/devel/marcmont/scratch/Harvi/geneflow/test/test.reconst.ids/ora_1_1/proportion/hg19.autosomes.chrom.sizes.txt')
 
 hg19.lengths<-apply(hg19[,2],2,function(x) as.numeric(as.character(x)))
 
-# hg19 chr in the correct order
 hg19<-hg19[c(1:18,20,19,22,21),]
 colnames(hg19)<-c("chrom","size") 
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-# gives lengths in bp
 calc_winlengths<-function(fG){
 win_lengths<-list()
 for (ind in (1:length(fG))) {
@@ -58,7 +53,7 @@ return(win_lengths)
 #-----------------------------------------------------------------------------------------------------------------------
 
 # generate random regions of a given length distribution (matching that of the fG input for each individual li)
-# run this function per individual
+
 test_proc_randomregions<-function(fG, li) {
 y<-as.data.frame(calc_winlengths(fG)[[li]])
 y$Var1<-as.numeric(as.character(y$Var1))
@@ -130,9 +125,8 @@ a=ind
 tmp<-paste("/scratch/devel/hpawar/admix/overlap.s*.skov/regionsperid/random/",SPE,"/",spe,".",a,".random.tmp.bed",sep="")
 
 chrom=chrom
-# filter by biallelic snps only, query by the putative introg regions for id 1 & output chr, pos & gts
 testsnps<-system(paste("bcftools view -m2 -M2 -v snps -R ",tmp," /scratch/devel/mkuhlwilm/arch/subsets/3_gorilla_",chrom,".vcf.gz | bcftools query -f '%CHROM %POS [%GT ]\n' ",sep=""),intern=T) 
-testsnps<-do.call(rbind,strsplit(testsnps,split=" "))  ## ie list merged vertically into df
+testsnps<-do.call(rbind,strsplit(testsnps,split=" ")) 
 
 return(testsnps)
 }
@@ -140,11 +134,6 @@ return(testsnps)
 #-----------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------
 
-# generate bed file of introg regions for 1 individual
-# intersect bed with all autosomal vcfs - extract chr, pos, gts
-# convert gts to matrix of 0,1,2
-# calculate pca
-# output PC 1,2 & % variance explained by each
 
 random_test_gts_topca<-function(scen,ind,SPE,spe) {
 
@@ -163,19 +152,13 @@ aut_oneid[which(aut_oneid=="1|1")]<-2
 
 gts<-aut_oneid
 
-# convert gts to matrix
 pcsub<-matrix(as.numeric(gts[,c(3:ncol(gts))]),nrow=nrow(gts))
 
-# calculate pca
 pca_tes <- dudi.pca(t(pcsub),nf=30,scannf=F)
-
-#pca_tes$eig # eigenvalues 
-#(pca_tes$li) li #the row coordinates i.e. the principal components
 
 # % of variance explained by each component:
 (k <- 100 * pca_tes$eig/sum(pca_tes$eig))
 
-# take the PCs 1-2, with the population identifiers
 pc1pc2<-as.data.frame(cbind(pca_tes$li,identifiers[,2]))
 
 x<-as.numeric(format(round(k[[1]], 2), nsmall = 2) )
