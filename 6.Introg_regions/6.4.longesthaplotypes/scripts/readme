@@ -1,2 +1,2 @@
-hapl_sstarskov_26jul22.R  # until line 394
-hapl_sstarskov_26oct22.R  # uses as input the long windows output on line 394 of hapl_sstarskov_26jul22.R to plot haplotype networks
+hapl_sstarskov_26jul22.R 
+hapl_sstarskov_26oct22.R  # uses as input the long windows output in hapl_sstarskov_26jul22.R to plot haplotype networks
