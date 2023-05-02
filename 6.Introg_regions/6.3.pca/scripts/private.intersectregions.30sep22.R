@@ -25,11 +25,10 @@ load(file="/scratch/devel/hpawar/admix/overlap.s*.skov/overlap_objects/ov_gbg_99
 
 extract_private_regions<-function(scen,lids,SPE,spe){
 
-myGRangesList<-GRangesList(scen) # convert to GRangesList object of length equal to number of individuals
+myGRangesList<-GRangesList(scen)
 
 # 1) calculate frequency of introgressed regions across individuals (how many regions in 1..N individuals)
-	# by calling non_overlapping_region_counts function
-
+	
 non_overlapping_region_counts<-function(x){
 reduced <- reduce(unlist(myGRangesList))
 consensusIDs <- paste0("consensus_", seq(1, length(reduced)))
@@ -42,7 +41,6 @@ return(reducedConsensus)
 
 testcount<-non_overlapping_region_counts()
 counts<-(as.data.frame((mcols(testcount))[,1:lids]))
-# freq of introg regions across the pop
 freq<-rowSums(counts)
 freq1<-as.data.frame(freq)
 
@@ -54,37 +52,33 @@ sbs<-testcount[private_rows,]
 
 # 3) for each individual, extract their private regions
 private_regions_perid<-function(id){
-# subset the sbs object to the chr, start, end pos, width, strand & counts of 0 or 1 for a given ind (where 0 = ind does not carry fragment, 1 = ind has this fragment as a private fragment)  
 id_1<-sbs[,id]
 id_1<-as.data.frame(id_1)
 id_1_s<-id_1[,c(1:3,6)]
 colnames(id_1_s)<-c("seqnames","start","end","id")
-# fragments found only within this individual
 test<-id_1_s[which(id_1_s$id==1),]
 return(test)
 }
 
-# loop over private_regions_perid function, for all individuals of this population -> to obtain list object of private regions for each id of pop
 private_allids<-list()
 for (ind in (1:lids)) {
 private_allids[[ind]]<-private_regions_perid(ind)
 }
 
-# function to convert private regions (unique to 1 individual) from df to bed format to bed file
+
 private_ind_df_tobed<-function(ind,SPE,spe){
 df<-(private_allids[[ind]][,c(1:3)])
 df$start<-df$start-1
-# convert to same structure of sk
 df[,1]<-as.character(df[,1])
 df[,2]<-as.integer(df[,2])
 
 
 a=ind
 tmp<-paste0("/scratch/devel/hpawar/admix/overlap.s*.skov/privateregionsperid/",SPE,"/",spe,".",a,".private.tmp.bed",sep="")
-write.table(df,tmp,sep="\t",row.names=F,col.names=F,quote=F) # should write this out only once
+write.table(df,tmp,sep="\t",row.names=F,col.names=F,quote=F) 
 }
 
-# 5) generate bed files of the private regions per individual (then intersect this with the vcfs)
+
 for (ind in (1:lids)) {
 private_ind_df_tobed(ind,SPE,spe) }
 
@@ -94,14 +88,5 @@ private_ind_df_tobed(ind,SPE,spe) }
 
 extract_private_regions(ov_gbb_99,12,"GBB","gbb")
 extract_private_regions(ov_gbg_99,9,"GBG","gbg")
-
-#-----------------------------------------------------------------------------------------------------------------------
-# have generated the bed files of private regions unique to one individual
-# use these as input for pcas & nj trees
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-# next intersect unqiue regions with vcfs -> generate pcas
-#bed file -> intersect with vcf, extract biallelic snps only -> output chr, pos, gts
 
 #-----------------------------------------------------------------------------------------------------------------------
