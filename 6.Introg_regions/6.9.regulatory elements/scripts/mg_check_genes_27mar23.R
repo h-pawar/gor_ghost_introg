@@ -181,34 +181,7 @@ write.table(backgroundse_h,file=paste("/scratch/devel/hpawar/admix/overlap.s*.sk
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-# this is the object with sEs in adaptive introg MG regions & corresponding genes
-#> head(na.omit(vtest2))
-#   seqnames    start      end width strand re
-#1      chr1 86922377 86924377  2001      * sE
-##2      chr1 86926569 86929182  2614      * sE
-#7      chr1 87236867 87239456  2590      * sE
-#9     chr10  5562517  5564519  2003      * sE
-#10    chr10  5571357  5579645  8289      * sE
-#11    chr10 17264352 17268358  4007      * sE
-#                                                       gene
-#1  ENSGGOG00000015738,ENSGGOG00000015862,ENSGGOG00000026782
-#2                                        ENSGGOG00000015738
-#7                                        ENSGGOG00000011067
-#9                                        ENSGGOG00000006693
-#10                                       ENSGGOG00000041078
-#11                                       ENSGGOG00000028048
-#> nrow(na.omit(vtest2))
-#[1] 155
-
-#gene_hg
-#               Human            Gorilla
-#448  ENSG00000117151 ENSGGOG00000015738
-#447  ENSG00000117133 ENSGGOG00000015862
-
-
 f<-na.omit(vtest2)
-
-
 
 hold_genes_se<-list()
 for (i in (1:nrow(gene_hg))) {
@@ -216,15 +189,6 @@ hold_genes_se[[i]]<- f[which(f$gene==gene_hg[i,2]),]}
 
 do.call(rbind,hold_genes_se)
 
-
-#> do.call(rbind,hold_genes_se)
-#    seqnames     start       end width strand re               gene
-#2       chr1  86926569  86929182  2614      * sE ENSGGOG00000015738
-#7       chr1  87236867  87239456  2590      * sE ENSGGOG00000011067
-#9      chr10   5562517   5564519  2003      * sE ENSGGOG00000006693
-#11     chr10  17264352  17268358  4007      * sE ENSGGOG00000028048
-#17     chr10 120014059 120019267  5209      * sE ENSGGOG00000003979
-#30     chr10 128054745 128056946  2202      * sE ENSGGOG00000005553
 
 mggenes_sedf<-do.call(rbind,hold_genes_se)
 
