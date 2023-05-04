@@ -7,7 +7,6 @@
 
 library("pls"); library("MASS");
 
-# processing from generateabc.6oct.R
 options(scipen=100)
 require(data.table)
 options(stringsAsFactors=F)
@@ -73,8 +72,4 @@ dev.off();
 q()
 
 #-----------------------------------------------------------------------------------------------------------------------
-
-scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/abc/simul/test/modelcomp/out/pls/RMSEP_sstat.nullabc_woutvalid_10comp.17feb22.pdf /Users/harvi/Downloads/gorilla_abc/modelchoice/pls
-scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/abc/simul/test/modelcomp/out/pls/PLSfile_sstat.nullabc_woutvalid_10comp.17feb22.txt /Users/harvi/Downloads/gorilla_abc/modelchoice/pls
-scp -r hpawar@172.16.10.20:/scratch/devel/hpawar/admix/abc/simul/test/modelcomp/out/pls/PLSfile_sstat.nullabc_woutvalid_10comp.17feb22.1.txt /Users/harvi/Downloads/gorilla_abc/modelchoice/pls
 
