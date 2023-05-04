@@ -1,6 +1,6 @@
 SOM 2. ABC modelling: 2.2 Summary statistic decorrelation
 
-correlate.summarystats.24jan22.R # correlate each of the empirical summary stat measures with each other (visualised in Fig S3A)
+correlate.summarystats.24jan22.R # correlate each of the empirical summary stat measures with each other (visualised in Fig S5A)
   
 reprocess.mc.stats.25jan22.R # attempt to uncorrelate by merging the correlated stats - ad hoc approach 
 
