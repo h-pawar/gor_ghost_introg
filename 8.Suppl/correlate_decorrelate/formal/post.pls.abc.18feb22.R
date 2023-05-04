@@ -58,7 +58,7 @@ for(i in 1:ncol(sstat)){
 #  read in the pls results
 load("/scratch/devel/hpawar/admix/abc/simul/test/modelcomp/out/pls/plsr_woutvalid_10comp.17feb22", verbose=T)
 
-cumsum(explvar(myPlsr)) # how much of variance is explained by x components used
+cumsum(explvar(myPlsr)) # how much of variance is explained by 10 components used
 
 # 2) get the scores for each simulation and each dimension, and predict the scores for the real statistics
 scrs<-matrix(myPlsr$scores,ncol=ncol(myPlsr$scores))  
