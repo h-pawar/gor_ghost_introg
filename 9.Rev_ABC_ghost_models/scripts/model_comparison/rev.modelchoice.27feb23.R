@@ -4,7 +4,7 @@
 
 # revised ghost models: sampling all parameters from priors 
 
-# 10,000 reps, model comparison simulations in paths - 
+# DE revised demog models: 10,000 reps, model comparison simulations in paths - 
 # /scratch/devel/hpawar/admix/abc/simul/test/ghost/revisions_8feb23/modelcomp/ghoste/rev.mc.ghoste_sim*
 # /scratch/devel/hpawar/admix/abc/simul/test/ghost/revisions_8feb23/modelcomp/ghostw/rev.mc.ghostw_sim* 
 
@@ -19,54 +19,20 @@
 # have generated 10,000 reps for nullplghost & ghoste & ghostw - using final posteriors
 
 # dir with original mc simulated data -  
+# ABC demog models: 10,000 reps, model comparison simulations in paths - 
 # /scratch/devel/hpawar/admix/abc/simul/test/modelcomp/final_12apr22/nullplusghost/
 # /scratch/devel/hpawar/admix/abc/simul/test/modelcomp/final_12apr22/ghoste/
 # /scratch/devel/hpawar/admix/abc/simul/test/modelcomp/final_12apr22/ghostw
 
 #-----------------------------------------------------------------------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------------------------
-
-
-# Thu 16 Dec 2021 14:38:17 CET
-# have generated 50*50=2500 reps for 
-    # A.1) null + ghost
-    # B) ghost -> e_anc
-
-# reps generated with -
-    # removing sites fixed across all gor ids, before calculating the summary stats - number of population-wise fixed and segregating sites & the number of fixed sites per individual
-
-
-# paths to scripts
-# model A.1) null + ghost
-
-# 1) null pl ghost
-#/scratch/devel/hpawar/admix/abc/simul/scripts/modelcomp/mc.nullplghost.12apr22.arr
-#/scratch/devel/hpawar/admix/abc/simul/scripts/modelcomp/mc.nullplghost.12apr22.R
-
-# 2) ghost -> e_anc
-#/scratch/devel/hpawar/admix/abc/simul/scripts/modelcomp/mc.ghoste.12apr22.arr
-#/scratch/devel/hpawar/admix/abc/simul/scripts/modelcomp/mc.ghoste.12apr22.R
-
-
-#-----------------------------------------------------------------------------------------------------------------------
-
-# following process of /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/simul_postabc/abc+ghost/modelcomp/modelchoice.null.9dec21.R
-
-#-----------------------------------------------------------------------------------------------------------------------
 # Fri  3 Dec 2021 12:20:18 CET
-# process summary statistics from 'model comparison simulations'
+# 1) process summary statistics from 'model comparison simulations'
     # these are simulations generated taking the parameter vals as the weighted median posteriors inferred from ABC analysis
-# 1) process summary stats in same way as in previous generateabc scripts
 # 2) perform model choice
     # - cross validation
     # - misclassification
 #-----------------------------------------------------------------------------------------------------------------------
 
-
-# following procedure of
-# /Volumes/"Ultra USB 3.0"/IBE/further.analysis.feb.2020/gorillas/abc/simul_postabc/abc+ghost/wanc.generateghostabc.22nov.R
-
-# run the following interactively
 #-----------------------------------------------------------------------------------------------------------------------
 library(abc)
 options(scipen=100)
