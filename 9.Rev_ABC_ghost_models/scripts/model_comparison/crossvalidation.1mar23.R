@@ -1,13 +1,12 @@
 #!/usr/bin/env
 
 # Wed  1 Mar 2023 09:36:40 CET
-# cross validation of 1000 samples for the 5 demographic models: ABCDE
 #module load R/4.0.1
 #-----------------------------------------------------------------------------------------------------------------------
 
 # 1) process summary statistics from 'model comparison simulations'
     # these are simulations generated taking the parameter vals as the weighted median posteriors inferred from ABC parameter inference
-# 2) cross validation
+# 2) cross validation of 1000 samples for the 5 demographic models: ABCDE
 
 #-----------------------------------------------------------------------------------------------------------------------
 library(abc)
