@@ -10,8 +10,6 @@
 # @ requeue = 1
 # @ array = 1-200
 
-# scale up to 200 (target 10,000 reps total)
-
 # Tue 21 Feb 2023 09:51:06 CET
 # generate model comparison simulations for revised ghost -> e_anc model - sampling all parameters from priors
 
