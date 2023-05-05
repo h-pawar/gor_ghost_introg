@@ -36,20 +36,13 @@ simns_param[[i]]<-inputsets
 }
 
 
-# check if any simulations failed 
-# simulations which failed 
+# check if any simulations failed  
 probl<-grep("Error", simns)
 
 problsimns=list()
 for (i in 1:length(probl)){
 problsimns[[i]]<-grep("Error", simns[[probl[i]]])
 }
-
-
-#howmanyproblsimns=list()
-#for (i in 1:length(probl)){
-#howmanyproblsimns[[i]]<-length(problsimns[[i]])
-#}
 
 #-----------------------------------------------------------------------------------------------------------------------
 
@@ -209,10 +202,8 @@ for(i in 1:length(simns[[y]]) ){
 t<-hold_problout[lengths(hold_problout) != 0]
 
 probltest=list()
-#for (i in 1:length(simns[[x]])){
 for (i in 1:length(t)){
 probltest[[i]]<-cbind(
-#simns[[x]][[i]][[6]][[2]][,1],
 t[[i]][[1]][,1],
 t[[i]][[2]][,1],
 t[[i]][[3]][,1],
