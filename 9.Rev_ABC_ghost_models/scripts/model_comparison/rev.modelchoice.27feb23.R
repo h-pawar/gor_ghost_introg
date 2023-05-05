@@ -15,7 +15,6 @@
 # /scratch/devel/hpawar/admix/abc/simul/test/modelcomp/final_12apr22/ghostw
 
 #-----------------------------------------------------------------------------------------------------------------------
-# Fri  3 Dec 2021 12:20:18 CET
 # 1) process summary statistics from 'model comparison simulations'
     # these are simulations generated taking the parameter vals as the weighted median posteriors inferred from ABC parameter inference
 # 2) perform model choice
