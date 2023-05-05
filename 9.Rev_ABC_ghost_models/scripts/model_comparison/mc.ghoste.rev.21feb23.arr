@@ -22,8 +22,6 @@ mkdir /dev/shm/mydata
 cd /dev/shm/mydata
 #-----------------------------------------------------------------------------------------------------------------------
 
-# 250 windows per iter - (per rep = 50 iter)
-# model comparison simulations
 
 R CMD BATCH --vanilla --slave "--args ${ID}" /scratch/devel/hpawar/admix/abc/simul/scripts/revisions_feb23/mc.ghoste.rev.21feb23.R  /scratch/devel/hpawar/admix/abc/simul/test/ghost/revisions_8feb23/log/mc_ghosterev_${ID}.log
 find /dev/shm/mydata/ -type f -mtime +1 -name 'mc.ghoste.sim*' -execdir rm -- '{}' \;
