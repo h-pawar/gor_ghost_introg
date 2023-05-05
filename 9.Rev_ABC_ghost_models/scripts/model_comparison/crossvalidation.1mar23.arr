@@ -11,7 +11,6 @@
 # @ array = 1
 
 #Wed  1 Mar 2023 09:41:50 CET
-# scale up reps for cross validation
 
 #ID=$SLURM_ARRAY_TASK_ID
 
